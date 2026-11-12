@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Natasya Makeup | MUA Depok untuk Wisuda, Lamaran, Akad & Bridesmaid</title>
+  <meta name="description" content="Natasya Makeup, MUA bersertifikat di Depok. Makeup wisuda, lamaran, akad, bridesmaid, tari, photoshoot, dan makeup fantasi. Melayani Depok dan sekitar Jabodetabek.">
+  <meta name="theme-color" content="#F8EAE7">
+
+  <!-- TODO: ganti domain setelah website online -->
+  <link rel="canonical" href="https://natasyamakeup.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:title" content="Natasya Makeup | MUA Depok">
+  <meta property="og:description" content="Makeup wisuda, lamaran, akad, bridesmaid, dan tari. Melayani Depok dan sekitar Jabodetabek.">
+  <meta property="og:image" content="assets/img/og-cover.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Italiana&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Nomor WA & data SEO (JSON-LD) diatur di assets/js/main.js > CONFIG -->
+</head>
+<body>
+  <a class="skip-link" href="#main">Langsung ke konten</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#hero" aria-label="Natasya Makeup, ke atas">
+        <span class="logo-name">Natasya</span>
+        <span class="logo-sub">makeup</span>
+      </a>
+      <nav class="site-nav" aria-label="Navigasi utama">
+        <a href="#looks">Layanan</a>
+        <a href="#portofolio">Portofolio</a>
+        <a href="#testimoni">Testimoni</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-primary btn-small" href="#booking">Booking</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1 class="wordmark">
+            <span class="wordmark-name">Natasya</span>
+            <span class="wordmark-sub">Makeup</span>
+          </h1>
+          <p class="hero-tagline">born to be shining</p>
+          <p class="hero-lead">MUA di Depok untuk wisuda, lamaran, akad, bridesmaid, tari, dan photoshoot. Bisa hijab maupun non-hijab. Melayani Depok dan sekitar Jabodetabek.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#booking">Booking jadwal</a>
+            <a class="btn btn-ghost" href="#portofolio">Lihat hasil makeup</a>
+          </div>
+          <p class="hero-note">Certified MUA sejak 2023</p>
+        </div>
+        <div class="hero-mirror">
+          <img src="assets/img/hero.jpg" alt="Riasan pengantin berhijab dengan ronce melati" width="900" height="900" fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+    <!-- LOOKS / LAYANAN -->
+    <section class="section looks" id="looks" aria-labelledby="looks-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="looks-title">Pilih look untuk acaramu</h2>
+          <p>Ketuk salah satu warna untuk lihat detail layanannya, lalu langsung booking.</p>
+        </div>
+
+        <div class="compact">
+          <div class="pans" role="group" aria-label="Jenis makeup">
+            <button class="pan" type="button" data-look="wisuda" aria-pressed="true" aria-controls="look-panel" style="--swatch:#34406E">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Wisuda</span>
+            </button>
+            <button class="pan" type="button" data-look="lamaran" aria-pressed="false" aria-controls="look-panel" style="--swatch:#E8A48C">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Lamaran</span>
+            </button>
+            <button class="pan" type="button" data-look="akad" aria-pressed="false" aria-controls="look-panel" style="--swatch:#E6D3BE">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Akad</span>
+            </button>
+            <button class="pan" type="button" data-look="bridesmaid" aria-pressed="false" aria-controls="look-panel" style="--swatch:#B7849A">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Bridesmaid</span>
+            </button>
+            <button class="pan" type="button" data-look="photoshoot" aria-pressed="false" aria-controls="look-panel" style="--swatch:#9A6A4F">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Photoshoot</span>
+            </button>
+            <button class="pan" type="button" data-look="tari" aria-pressed="false" aria-controls="look-panel" style="--swatch:#A92F3D">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Tari</span>
+            </button>
+            <button class="pan" type="button" data-look="reguler" aria-pressed="false" aria-controls="look-panel" style="--swatch:#D3A096">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Reguler</span>
+            </button>
+            <button class="pan" type="button" data-look="fantasi" aria-pressed="false" aria-controls="look-panel" style="--swatch:#7E62B0">
+              <span class="pan-swatch" aria-hidden="true"></span>
+              <span class="pan-name">Fantasi</span>
+            </button>
+          </div>
+
+          <div class="look-panel" id="look-panel" aria-live="polite">
+            <article class="look-detail" data-look="wisuda">
+              <figure class="look-photo" style="--swatch:#34406E"><img src="assets/img/portfolio/wisuda-1.jpg" alt="Makeup wisuda dengan hijab merah dan toga" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup wisuda</h3>
+                <p>Awet seharian, dari prosesi sampai foto bareng keluarga. Bisa hijab maupun non-hijab.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp350.000</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup, hijab do atau hairdo simpel, bulu mata</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="wisuda">Booking makeup wisuda</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="lamaran" hidden>
+              <figure class="look-photo" style="--swatch:#E8A48C"><img src="assets/img/portfolio/lamaran-1.jpg" alt="Makeup lamaran dengan kebaya brokat putih" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup lamaran</h3>
+                <p>Riasan lembut yang tetap kelihatan di foto, untuk momen ketemu dua keluarga.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp500.000</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup, hijab do atau hairdo, bulu mata</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="lamaran">Booking makeup lamaran</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="akad" hidden>
+              <figure class="look-photo" style="--swatch:#E6D3BE"><img src="assets/img/portfolio/akad-1.jpg" alt="Makeup akad pengantin berhijab putih" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup akad</h3>
+                <p>Riasan pengantin untuk akad nikah. Detail paket dan jumlah orang bisa didiskusikan lewat WhatsApp.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp1.200.000</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup pengantin, hijab do atau hairdo, bulu mata, satu kali touch up sebelum acara</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="akad">Booking makeup akad</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="bridesmaid" hidden>
+              <figure class="look-photo" style="--swatch:#B7849A"><img src="assets/img/portfolio/bridesmaid-1.jpg" alt="Makeup bridesmaid berhijab dengan seragam kuning" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup bridesmaid</h3>
+                <p>Satu look yang senada untuk kamu dan teman-teman pendamping pengantin.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp300.000 per orang</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup, hijab do atau hairdo, bulu mata</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="bridesmaid">Booking makeup bridesmaid</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="photoshoot" hidden>
+              <figure class="look-photo" style="--swatch:#9A6A4F"><img src="assets/img/portfolio/photoshoot-1.jpg" alt="Makeup photoshoot berhijab dengan mahkota" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup photoshoot &amp; model</h3>
+                <p>Makeup yang dibuat untuk kamera dan lampu studio.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp350.000</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup, bulu mata, satu kali touch up selama sesi foto</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="photoshoot">Booking makeup photoshoot</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="tari" hidden>
+              <figure class="look-photo" style="--swatch:#A92F3D"><img src="assets/img/portfolio/tari-1.jpg" alt="Makeup tari dengan mahkota tradisional" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup tari</h3>
+                <p>Riasan panggung yang tegas dan tetap terbaca dari kursi penonton.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp250.000 per orang</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup panggung dan bulu mata</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="tari">Booking makeup tari</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="reguler" hidden>
+              <figure class="look-photo" style="--swatch:#D3A096"><img src="assets/img/portfolio/reguler-1.jpg" alt="Makeup reguler dengan hijab cokelat" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup reguler</h3>
+                <p>Untuk kondangan, acara kantor, atau hari biasa yang mau dirayakan.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp300.000</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup dan bulu mata</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="reguler">Booking makeup reguler</a>
+              </div>
+            </article>
+            <article class="look-detail" data-look="fantasi" hidden>
+              <figure class="look-photo" style="--swatch:#7E62B0"><img src="assets/img/portfolio/fantasi-1.jpg" alt="Makeup kreatif dengan glitter merah" width="800" height="1000" loading="lazy" decoding="async"></figure>
+              <div class="look-body">
+                <h3>Makeup fantasi</h3>
+                <p>Karakter dan konsep kreatif untuk lomba, karnaval, atau konten.</p>
+                <dl class="look-meta">
+                  <div><dt>Mulai dari</dt><dd data-draft>Rp400.000</dd></div>
+                  <div><dt>Sudah termasuk</dt><dd data-draft>Makeup karakter sesuai konsep dan bulu mata</dd></div>
+                </dl>
+                <a class="btn btn-light" href="#booking" data-book="fantasi">Booking makeup fantasi</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTOFOLIO -->
+    <section class="section portfolio" id="portofolio" aria-labelledby="portfolio-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="portfolio-title">Hasil makeup Natasya</h2>
+          <p>Pilih kategori untuk melihat contoh look sesuai acaramu.</p>
+        </div>
+
+        <div class="filters" role="group" aria-label="Saring portofolio">
+          <button class="chip" type="button" data-filter="semua" aria-pressed="true">Semua</button>
+          <button class="chip" type="button" data-filter="wisuda" aria-pressed="false">Wisuda</button>
+          <button class="chip" type="button" data-filter="lamaran" aria-pressed="false">Lamaran &amp; akad</button>
+          <button class="chip" type="button" data-filter="bridesmaid" aria-pressed="false">Bridesmaid</button>
+          <button class="chip" type="button" data-filter="tari" aria-pressed="false">Tari &amp; fantasi</button>
+          <button class="chip" type="button" data-filter="lainnya" aria-pressed="false">Lainnya</button>
+        </div>
+
+        <ul class="gallery">
+          <li class="shot" data-category="wisuda">
+            <figure><img src="assets/img/portfolio/wisuda-1.jpg" alt="Makeup wisuda dengan hijab merah dan toga" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Wisuda</figcaption></figure>
+          </li>
+          <li class="shot" data-category="lamaran">
+            <figure><img src="assets/img/portfolio/lamaran-1.jpg" alt="Makeup lamaran dengan kebaya brokat putih" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Lamaran</figcaption></figure>
+          </li>
+          <li class="shot" data-category="bridesmaid">
+            <figure><img src="assets/img/portfolio/bridesmaid-1.jpg" alt="Makeup bridesmaid berhijab dengan seragam kuning bersama pengantin" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Bridesmaid</figcaption></figure>
+          </li>
+          <li class="shot" data-category="tari">
+            <figure><img src="assets/img/portfolio/tari-1.jpg" alt="Makeup tari dengan mahkota tradisional" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Tari</figcaption></figure>
+          </li>
+          <li class="shot" data-category="wisuda">
+            <figure><img src="assets/img/portfolio/wisuda-2.jpg" alt="Makeup wisuda dengan hijab krem" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Wisuda</figcaption></figure>
+          </li>
+          <li class="shot" data-category="lamaran">
+            <figure><img src="assets/img/portfolio/akad-1.jpg" alt="Makeup akad pengantin berhijab putih" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Akad</figcaption></figure>
+          </li>
+          <li class="shot" data-category="lainnya">
+            <figure><img src="assets/img/portfolio/photoshoot-1.jpg" alt="Makeup photoshoot berhijab dengan mahkota" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Photoshoot</figcaption></figure>
+          </li>
+          <li class="shot" data-category="tari">
+            <figure><img src="assets/img/portfolio/fantasi-1.jpg" alt="Makeup kreatif dengan glitter merah" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Fantasi</figcaption></figure>
+          </li>
+          <li class="shot" data-category="lainnya">
+            <figure><img src="assets/img/portfolio/reguler-1.jpg" alt="Makeup reguler dengan hijab cokelat" width="800" height="1000" loading="lazy" decoding="async"><figcaption>Reguler</figcaption></figure>
+          </li>
+        </ul>
+
+        <p class="gallery-more">Ratusan hasil lainnya ada di Instagram <a href="https://www.instagram.com/makeupnatasya/" target="_blank" rel="noopener">@makeupnatasya</a>.</p>
+      </div>
+    </section>
+
+    <!-- TESTIMONI -->
+    <section class="section testimonials" id="testimoni" aria-labelledby="testi-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="testi-title">Kata mereka</h2>
+          <p>Diambil dari chat WhatsApp klien setelah dirias.</p>
+        </div>
+        <div class="bubbles">
+          <blockquote class="bubble" data-draft>
+            <p>Suka bgt sama hasil makeupnya, rapih dan flawless bgt, AWET! Kak Nat pengerjaannya juga satset ga pake drama, terus sabar bgt kalo dimintain request ini itu, dan ngejelasin ke kita juga ramah bgt.</p>
+          </blockquote>
+          <blockquote class="bubble" data-draft>
+            <p>Bagusss, aku suka, natural sesuai request. Seneng banget, aku yang gak pede kalo makeup tapi ini natural jadi suka. Ringan juga makeupnya.</p>
+          </blockquote>
+          <blockquote class="bubble" data-draft>
+            <p>Cinta banget sama makeupnya, ga luntur, ga crack samsek, malah makin bagus complexionnya.</p>
+          </blockquote>
+          <blockquote class="bubble" data-draft>
+            <p>Dipake upacara sambil panas-panasan masih on point!</p>
+          </blockquote>
+          <blockquote class="bubble" data-draft>
+            <p>Suka banget makeupnya. Kata temenku bagusss.</p>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- TENTANG -->
+    <section class="section about" id="tentang" aria-labelledby="about-title">
+      <div class="container about-inner">
+        <img class="about-photo" src="assets/img/profil.jpg" alt="Proses merias wajah dengan kuas blush" width="800" height="1000" loading="lazy" decoding="async">
+        <div class="about-copy">
+          <h2 id="about-title">Halo, aku Natasya</h2>
+          <p>MUA bersertifikat sejak 2023, tinggal dan bekerja di Depok. Klien paling sering bilang hasilnya natural sesuai request, rapi, ringan di wajah, dan awet seharian.</p>
+          <p>Sebelum hari H, kirim saja referensi look yang kamu suka. Kita ngobrol dulu soal warna, gaya hijab atau rambut, dan acaranya, supaya hasilnya pas buat kamu.</p>
+          <p class="about-links">
+            Lihat keseharianku di <a href="https://www.instagram.com/natasyamlsyhdll/" target="_blank" rel="noopener">@natasyamlsyhdll</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section class="section booking" id="booking" aria-labelledby="booking-title">
+      <div class="container booking-inner">
+        <div class="booking-info">
+          <h2 id="booking-title">Booking jadwal makeup</h2>
+          <ol class="steps">
+            <li>Isi form ini sesuai acaramu.</li>
+            <li>Ketuk tombol kirim, pesanmu langsung terbuka di WhatsApp Natasya.</li>
+            <li>Natasya konfirmasi jadwal, harga, dan detail pembayaran lewat chat.</li>
+          </ol>
+          <p class="booking-direct">Mau tanya dulu? Chat langsung ke <a data-wa href="#booking">WhatsApp <span data-wa-display></span></a>.</p>
+        </div>
+
+        <form class="booking-form" id="booking-form" novalidate>
+          <div class="field">
+            <label for="f-nama">Nama kamu</label>
+            <input id="f-nama" name="nama" type="text" autocomplete="name" required>
+            <p class="field-error" id="e-nama" hidden>Tulis nama kamu dulu.</p>
+          </div>
+
+          <div class="field">
+            <label for="f-look">Jenis makeup</label>
+            <select id="f-look" name="look" required>
+              <option value="">Pilih jenis makeup</option>
+              <option value="wisuda">Wisuda</option>
+              <option value="lamaran">Lamaran</option>
+              <option value="akad">Akad</option>
+              <option value="bridesmaid">Bridesmaid</option>
+              <option value="photoshoot">Photoshoot &amp; model</option>
+              <option value="tari">Tari</option>
+              <option value="reguler">Reguler</option>
+              <option value="fantasi">Fantasi</option>
+            </select>
+            <p class="field-error" id="e-look" hidden>Pilih salah satu jenis makeup.</p>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f-tanggal">Tanggal acara</label>
+              <input id="f-tanggal" name="tanggal" type="date" required>
+              <p class="field-error" id="e-tanggal" hidden>Pilih tanggal acara, minimal hari ini.</p>
+            </div>
+            <div class="field">
+              <label for="f-jam">Makeup selesai jam</label>
+              <input id="f-jam" name="jam" type="time">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-lokasi">Lokasi makeup</label>
+            <input id="f-lokasi" name="lokasi" type="text" placeholder="Contoh: Cimanggis, Depok" required>
+            <p class="field-error" id="e-lokasi" hidden>Tulis lokasi makeup, cukup kecamatan dan kota.</p>
+          </div>
+
+          <div class="field">
+            <label for="f-jumlah">Jumlah orang yang dirias</label>
+            <input id="f-jumlah" name="jumlah" type="number" min="1" max="30" value="1" inputmode="numeric" required>
+            <p class="field-error" id="e-jumlah" hidden>Isi jumlah orang, minimal 1.</p>
+          </div>
+
+          <div class="field">
+            <label for="f-catatan">Catatan <span class="optional">(opsional)</span></label>
+            <textarea id="f-catatan" name="catatan" rows="3" placeholder="Hijab atau non-hijab, warna baju, referensi look"></textarea>
+          </div>
+
+          <a class="btn btn-primary btn-block" id="wa-send" data-wa href="#booking">Kirim ke WhatsApp</a>
+          <p class="form-hint">Pesan akan terbuka di WhatsApp dan belum terkirim sampai kamu menekan kirim di sana.</p>
+          <button class="btn-text" type="reset" id="form-reset">Kosongkan form</button>
+          <p class="sr-only" id="form-status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="container faq-inner">
+        <h2 id="faq-title">Pertanyaan yang sering masuk</h2>
+        <div class="faq-list">
+          <details>
+            <summary>Area mana saja yang dilayani?</summary>
+            <p data-draft>Depok dan sekitar Jabodetabek. Harga sudah termasuk transport untuk wilayah Depok. Di luar Depok ada tambahan biaya transport sesuai jarak, nanti diinfokan lewat WhatsApp.</p>
+          </details>
+          <details>
+            <summary>Natasya datang ke lokasi atau aku yang datang?</summary>
+            <p data-draft>Natasya datang ke lokasimu, entah di rumah, gedung, atau dekat kampus. Siapkan tempat yang terang dan stopkontak di dekat kursi makeup.</p>
+          </details>
+          <details>
+            <summary>Bisa makeup untuk yang berhijab?</summary>
+            <p data-draft>Bisa. Banyak klien Natasya berhijab, dan hijab do sudah termasuk di paket wisuda, lamaran, akad, dan bridesmaid. Siapkan hijab dan jarum pentul yang mau dipakai.</p>
+          </details>
+          <details>
+            <summary>Perlu DP untuk mengunci jadwal?</summary>
+            <p data-draft>Perlu. Jadwal dikunci setelah DP 50%, pelunasan di hari H sebelum makeup dimulai. Reschedule bisa satu kali selama jadwal baru masih kosong. Kalau batal, DP tidak dikembalikan.</p>
+          </details>
+          <details>
+            <summary>Berapa lama proses makeup per orang?</summary>
+            <p data-draft>Sekitar 60 sampai 90 menit per orang, tergantung look dan gaya hijab atau rambut. Untuk akad, siapkan waktu lebih panjang.</p>
+          </details>
+          <details>
+            <summary>Bisa booking untuk rombongan?</summary>
+            <p data-draft>Bisa, misalnya untuk bridesmaid atau wisuda bareng teman. Tulis jumlah orangnya di form, nanti Natasya hitung jam mulai supaya semuanya selesai tepat waktu.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <p class="logo logo-footer">
+          <span class="logo-name">Natasya</span>
+          <span class="logo-sub">makeup</span>
+        </p>
+        <p class="footer-tagline">born to be shining</p>
+      </div>
+      <div class="footer-contact">
+        <p>Depok, Jawa Barat. Melayani Depok dan sekitar Jabodetabek.</p>
+        <p>WhatsApp <a data-wa href="#booking"><span data-wa-display>chat sekarang</span></a></p>
+        <p>Instagram <a href="https://www.instagram.com/natasyamlsyhdll/" target="_blank" rel="noopener">@natasyamlsyhdll</a> dan <a href="https://www.instagram.com/makeupnatasya/" target="_blank" rel="noopener">@makeupnatasya</a></p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; <span id="year">2026</span> Natasya Makeup</p>
+    </div>
+  </footer>
+
+  <div class="booking-bar" id="booking-bar">
+    <a class="btn btn-primary btn-block" href="#booking">Booking jadwal makeup</a>
+  </div>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
