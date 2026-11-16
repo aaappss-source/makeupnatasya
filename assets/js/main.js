@@ -53,6 +53,51 @@ const LOOK_NAMES = {
 };
 
 /* ---------- Pilih look (palet) ---------- */
+/* ---------- "Lihat selengkapnya" di detail look (laptop/tablet) ---------- */
+const LOOK_SIDE_BY_SIDE = window.matchMedia("(min-width: 761px)");
+
+function closeLookInfo(detail) {
+  const btn = detail.querySelector(".look-more");
+  detail.classList.remove("is-open");
+  if (btn) {
+    btn.setAttribute("aria-expanded", "false");
+    btn.textContent = "Lihat selengkapnya";
+  }
+  measureLookInfo(detail);
+}
+
+function measureLookInfo(detail) {
+  const info = detail.querySelector(".look-info");
+  const btn = detail.querySelector(".look-more");
+  if (!info || !btn || detail.classList.contains("is-open")) return;
+  const clipped = LOOK_SIDE_BY_SIDE.matches && info.scrollHeight > info.clientHeight + 2;
+  detail.classList.toggle("is-clipped", clipped);
+  btn.hidden = !clipped;
+}
+
+function initLookMore() {
+  const details = document.querySelectorAll(".look-detail");
+  const observer = "ResizeObserver" in window
+    ? new ResizeObserver((entries) => entries.forEach((e) => measureLookInfo(e.target.closest(".look-detail"))))
+    : null;
+  details.forEach((detail) => {
+    const info = detail.querySelector(".look-info");
+    const btn = detail.querySelector(".look-more");
+    if (!info || !btn) return;
+    btn.addEventListener("click", () => {
+      const open = !detail.classList.contains("is-open");
+      if (!open) return closeLookInfo(detail);
+      detail.classList.add("is-open");
+      btn.setAttribute("aria-expanded", "true");
+      btn.textContent = "Tampilkan lebih sedikit";
+    });
+    if (observer) observer.observe(info);
+    measureLookInfo(detail);
+  });
+  LOOK_SIDE_BY_SIDE.addEventListener("change", () => details.forEach(closeLookInfo));
+  if (document.fonts) document.fonts.ready.then(() => details.forEach((d) => measureLookInfo(d)));
+}
+
 function initLooks() {
   const pans = document.querySelectorAll(".pan");
   const details = document.querySelectorAll(".look-detail");
@@ -62,7 +107,10 @@ function initLooks() {
     pan.addEventListener("click", () => {
       const look = pan.dataset.look;
       pans.forEach((p) => p.setAttribute("aria-pressed", String(p === pan)));
-      details.forEach((d) => { d.hidden = d.dataset.look !== look; });
+      details.forEach((d) => {
+        d.hidden = d.dataset.look !== look;
+        if (d.hidden) closeLookInfo(d);
+      });
     });
   });
 
@@ -652,6 +700,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initWaLinks();
   injectStructuredData();
   initLooks();
+  initLookMore();
   initGalleryFilter();
   initTestimonials();
   initSheets();
