@@ -124,7 +124,7 @@ a:hover { color: var(--berry-tua); }
 }
 .btn-primary { background: var(--berry); color: #fff; }
 .btn-primary:hover { background: var(--berry-tua); color: #fff; }
-.btn-ghost { border-color: var(--maskara); color: var(--maskara); }
+.btn-ghost { border-color: var(--maskara); background: transparent; color: var(--maskara); }
 .btn-ghost:hover { background: var(--maskara); color: var(--kapas); }
 .btn-light { background: var(--bedak); color: var(--maskara); }
 .btn-light:hover { background: var(--kapas); color: var(--maskara); }
@@ -417,6 +417,11 @@ a:hover { color: var(--berry-tua); }
 
 .gallery-more { margin-top: 2rem; }
 
+/* Tombol "Lihat lebih banyak" (galeri & testimoni) */
+.load-more-wrap { display: flex; justify-content: center; }
+.load-more { margin-top: 1.75rem; }
+.load-more[hidden], .bubble[hidden] { display: none; }
+
 /* ---------- Testimoni ---------- */
 .testimonials { background: var(--kapas); }
 
@@ -432,7 +437,21 @@ a:hover { color: var(--berry-tua); }
 .bubble p { font-size: 1.0625rem; }
 .bubble cite { display: block; margin-top: 0.5rem; font-size: var(--fs-sm); font-style: normal; color: var(--abu-plum); }
 .bubble-shot { padding: 0.5rem; border-radius: 20px 20px 20px 6px; }
+.bubble-shot { --shot-max: 420px; scroll-margin-top: 6rem; }
 .bubble-shot img { display: block; width: 100%; height: auto; border-radius: 14px; background: var(--garis); }
+/* Screenshot chat yang panjang dipotong dulu, bisa dibuka utuh */
+.shot-clip { position: relative; overflow: hidden; border-radius: 14px; }
+.bubble-shot.is-tall:not(.is-open) .shot-clip { max-height: var(--shot-max); cursor: pointer; }
+.bubble-shot.is-tall:not(.is-open) .shot-clip::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 5rem;
+  background: linear-gradient(to bottom, transparent, var(--bedak));
+  pointer-events: none;
+}
+.shot-toggle { display: none; margin: 0.25rem 0 0 0.1rem; }
+.bubble-shot.is-tall .shot-toggle { display: inline-block; }
 .bubble-shot figcaption { margin: 0.5rem 0.6rem 0.2rem; font-size: var(--fs-sm); color: var(--abu-plum); }
 .todo-note { margin-top: 1.5rem; font-size: var(--fs-sm); color: var(--abu-plum); }
 
@@ -595,6 +614,7 @@ a:hover { color: var(--berry-tua); }
 }
 
 @media (max-width: 760px) {
+  .bubble-shot { --shot-max: 360px; }
   :root { --header-h: 60px; }
 
   .site-nav { display: none; }

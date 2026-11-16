@@ -19,6 +19,12 @@ Semua foto di website dan testimoni bisa diganti tanpa coding, cukup lewat **Goo
 
 **Menyembunyikan** foto/testimoni: pilih `tidak` di kolom **tampil**. **Menghapus**: hapus barisnya.
 
+## Tampilan kalau foto & testimoni sudah banyak
+- **Portofolio:** tampil 9 foto dulu di laptop (6 di HP/tablet), sisanya muncul saat pengunjung menekan **Lihat lebih banyak**. Urutan di website sama dengan urutan baris di spreadsheet, jadi taruh foto terbaik di baris paling atas.
+- **Testimoni:** tampil 6 dulu di laptop (4 di HP), sisanya lewat tombol yang sama.
+- **Screenshot chat yang panjang** dipotong dulu (maks ±420px di laptop, ±360px di HP) dengan tombol **Lihat chat lengkap**. Screenshot pendek tampil utuh.
+- Jumlah foto tidak dibatasi. Spreadsheet sudah disiapkan 79 baris Portofolio dan 59 baris Testimoni lengkap dengan dropdown dan pratinjau.
+
 ## Aturan penting
 - Pakai **foto tegak (portrait)**. Foto mendatar terpotong di kiri-kanan. Untuk `hero`, foto dipotong bulat, jadi wajah sebaiknya di tengah.
 - Jangan hapus foto dari folder Drive selama masih dipakai di website.

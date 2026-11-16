@@ -116,25 +116,90 @@ function initPanLayout() {
   onResize();
 }
 
+/* ---------- "Lihat lebih banyak" (galeri & testimoni) ---------- */
+// Di layar <= 960px galeri jadi 2 kolom, jadi per halaman 6 foto (3 baris).
+const SMALL_SCREEN = window.matchMedia("(max-width: 960px)");
+
+function createPager({ list, button, itemSelector, perPage, isIncluded = () => true }) {
+  let pages = 1;
+  const size = () => (SMALL_SCREEN.matches ? perPage.small : perPage.large);
+
+  function apply() {
+    const items = [...list.querySelectorAll(itemSelector)];
+    const included = items.filter(isIncluded);
+    const limit = pages * size();
+    items.forEach((el) => { if (!included.includes(el)) el.hidden = true; });
+    included.forEach((el, i) => { el.hidden = i >= limit; });
+    const remaining = Math.max(0, included.length - limit);
+    // Tanpa angka sisa: foto dengan link rusak baru ketahuan saat dimuat,
+    // jadi angkanya bisa meleset.
+    button.hidden = remaining === 0;
+  }
+
+  button.addEventListener("click", () => { pages += 1; apply(); });
+  SMALL_SCREEN.addEventListener("change", apply);
+  return { apply, reset() { pages = 1; apply(); } };
+}
+
 /* ---------- Filter portofolio ---------- */
-function applyGalleryFilter() {
+let galleryPager = null;
+
+function activeFilter() {
   const active = document.querySelector('.chip[aria-pressed="true"]');
-  const filter = active ? active.dataset.filter : "semua";
-  document.querySelectorAll(".shot").forEach((shot) => {
-    shot.hidden = filter !== "semua" && shot.dataset.category !== filter;
-  });
+  return active ? active.dataset.filter : "semua";
 }
 
 function initGalleryFilter() {
-  const chips = document.querySelectorAll(".chip");
-  if (!chips.length) return;
+  const list = document.querySelector(".gallery");
+  const button = document.getElementById("gallery-load");
+  if (!list || !button) return;
+  galleryPager = createPager({
+    list,
+    button,
+    itemSelector: ".shot",
+    perPage: { large: 9, small: 6 },
+    isIncluded: (shot) => activeFilter() === "semua" || shot.dataset.category === activeFilter(),
+  });
 
+  const chips = document.querySelectorAll(".chip");
   chips.forEach((chip) => {
     chip.addEventListener("click", () => {
       chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
-      applyGalleryFilter();
+      galleryPager.reset();
     });
   });
+  galleryPager.apply();
+}
+
+/* ---------- Testimoni ---------- */
+let testiPager = null;
+
+function initTestimonials() {
+  const list = document.querySelector(".bubbles");
+  const button = document.getElementById("testi-load");
+  if (!list || !button) return;
+  testiPager = createPager({ list, button, itemSelector: ":scope > .bubble", perPage: { large: 6, small: 4 } });
+  testiPager.apply();
+}
+
+// Screenshot chat dianggap panjang kalau 20% lebih tinggi dari batas.
+function markTall(img) {
+  const fig = img.closest(".bubble-shot");
+  if (!fig || fig.classList.contains("is-open")) return;
+  const cap = parseFloat(getComputedStyle(fig).getPropertyValue("--shot-max")) || 420;
+  fig.classList.toggle("is-tall", img.offsetHeight > cap * 1.2);
+}
+
+const tallObserver = "ResizeObserver" in window
+  ? new ResizeObserver((entries) => entries.forEach((e) => markTall(e.target)))
+  : null;
+
+function toggleShot(fig, toggle) {
+  const open = !fig.classList.contains("is-open");
+  fig.classList.toggle("is-open", open);
+  toggle.setAttribute("aria-expanded", String(open));
+  toggle.textContent = open ? "Tutup" : "Lihat chat lengkap";
+  if (!open && fig.getBoundingClientRect().top < 0) fig.scrollIntoView({ block: "start" });
 }
 
 /* ---------- Isi dari Google Sheets (portofolio & testimoni) ---------- */
@@ -246,7 +311,10 @@ function renderGallery(rows) {
     img.loading = "lazy";
     img.decoding = "async";
     img.referrerPolicy = "no-referrer";
-    img.addEventListener("error", () => li.remove());
+    img.addEventListener("error", () => {
+      li.remove();
+      if (galleryPager) galleryPager.apply();
+    });
     const cap = document.createElement("figcaption");
     cap.textContent = caption;
     fig.append(img, cap);
@@ -255,7 +323,7 @@ function renderGallery(rows) {
   });
   if (!items.length) return;
   list.replaceChildren(...items);
-  applyGalleryFilter();
+  if (galleryPager) galleryPager.reset();
 }
 
 function renderTestimonials(rows) {
@@ -268,19 +336,35 @@ function renderTestimonials(rows) {
     if (src) {
       const fig = document.createElement("figure");
       fig.className = "bubble bubble-shot";
+      const clip = document.createElement("div");
+      clip.className = "shot-clip";
       const img = document.createElement("img");
       img.src = src;
       img.alt = row.nama ? `Chat testimoni dari ${row.nama}` : "Chat testimoni dari klien";
       img.loading = "lazy";
       img.decoding = "async";
       img.referrerPolicy = "no-referrer";
-      img.addEventListener("error", () => fig.remove());
-      fig.append(img);
+      img.addEventListener("error", () => {
+        fig.remove();
+        if (testiPager) testiPager.apply();
+      });
+      clip.append(img);
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "btn-text shot-toggle";
+      toggle.textContent = "Lihat chat lengkap";
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.addEventListener("click", () => toggleShot(fig, toggle));
+      clip.addEventListener("click", () => {
+        if (fig.classList.contains("is-tall")) toggleShot(fig, toggle);
+      });
+      fig.append(clip, toggle);
       if (row.nama) {
         const cap = document.createElement("figcaption");
         cap.textContent = row.nama;
         fig.append(cap);
       }
+      if (tallObserver) tallObserver.observe(img);
       items.push(fig);
     } else if (row.teks) {
       const bq = document.createElement("blockquote");
@@ -298,6 +382,7 @@ function renderTestimonials(rows) {
   });
   if (!items.length) return;
   box.replaceChildren(...items);
+  if (testiPager) testiPager.reset();
 }
 
 /* Foto tetap: hero, foto Natasya di Tentang, dan foto tiap look. */
@@ -569,6 +654,7 @@ document.addEventListener("DOMContentLoaded", () => {
   injectStructuredData();
   initLooks();
   initGalleryFilter();
+  initTestimonials();
   initSheets();
   initBookingForm();
   initScrollUI();
