@@ -9,7 +9,10 @@ natasya-makeup/
 ├── index.html              # semua konten halaman
 ├── assets/
 │   ├── css/style.css       # token warna & font ada di :root paling atas
-│   └── js/main.js          # nomor WA & ID Google Sheets ada di CONFIG paling atas
+│   ├── js/main.js          # nomor WA & ID Google Sheets ada di CONFIG paling atas
+│   └── img/
+│       ├── logo-240/480/880.webp, logo-480.png  # logo asli, latar dibuat transparan
+│       └── og-cover.jpg    # gambar preview saat link dibagikan (1200x630)
 ├── PANDUAN-NATASYA.md      # cara ganti foto & testimoni lewat Google Sheets
 └── README.md
 ```
@@ -47,11 +50,9 @@ dan Jabodetabek.
 - [ ] **Isi semua foto di spreadsheet** (Foto Utama + Portofolio). Sebelum diisi, website
       menampilkan kotak putih.
 - [ ] Izin klien untuk foto portofolio asli & screenshot chat testimoni
-- [ ] Gambar pratinjau saat link dibagikan di WhatsApp/sosmed (`og:image`) belum ada.
-      Tidak bisa dari spreadsheet karena WhatsApp tidak menjalankan JavaScript: simpan satu
-      foto asli 1200x630 sebagai `assets/img/og-cover.jpg` lalu pasang lagi tag `og:image`
-      dengan URL lengkap.
-- [ ] Domain final, lalu ganti `canonical` jadi URL lengkap
+- [x] Gambar preview link (`og:image`) = logo Natasya di atas putih, 1200x630.
+- [ ] Kalau pindah ke domain sendiri: ganti `canonical`, `og:url`, dan `og:image` di `index.html`
+      (sekarang memakai alamat GitHub Pages).
 - [x] Nomor WA sudah nomor Natasya `6285171502605` (sesuai brosur). Tes otomatis memakai
       nomor tiruan dan memblokir WhatsApp, jadi tidak pernah mengirim ke Natasya.
 - [ ] Konfirmasi area layanan (brosur hanya menyebut Cimanggis, Depok dan gratis transport 5 km)
