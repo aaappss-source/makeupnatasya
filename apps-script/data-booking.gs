@@ -61,15 +61,25 @@ function simpanBooking_(d) {
       for (let i = ids.length - 1; i >= 0; i--) {
         if (String(ids[i][0]) === id) {
           tab.getRange(i + 2, 1, 1, data.length).setValues([data]);   // Status & Keterangan tetap
+          rapikanFormat_(tab, i + 2);
           return 'diperbarui';
         }
       }
     }
     tab.appendRow(data.concat(['Pending', '', id]));
+    rapikanFormat_(tab, tab.getLastRow());
     return 'baru';
   } finally {
     kunciTulis.releaseLock();
   }
+}
+
+// Sheets mengganti format sel jadi "tanggal + jam" setiap kali skrip menulis tanggal,
+// jadi format kolom waktu, tanggal acara, dan jam diatur ulang per baris.
+function rapikanFormat_(tab, baris) {
+  tab.getRange(baris, 1).setNumberFormat('dd/mm/yyyy hh:mm');
+  tab.getRange(baris, 4).setNumberFormat('dddd, d mmmm yyyy');
+  tab.getRange(baris, 5).setNumberFormat('hh:mm');
 }
 
 // Rapikan teks: buang karakter kontrol, batasi panjang, dan cegah teks dibaca sebagai rumus.

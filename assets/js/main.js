@@ -32,7 +32,7 @@ const CONFIG = {
   // Isi dengan link Web App dari Apps Script (lihat PASANG-DATA-BOOKING.md).
   // Kosong = tidak dicatat, form tetap jalan seperti biasa.
   booking: {
-    logUrl: "",
+    logUrl: "https://script.google.com/macros/s/AKfycbxLrt1tbnTBIFzOf-E9s-DMpJJgfDUQSThIRAhqe8iTxmQBoD-W3r6H9JCHlMSaUq4/exec",
   },
 
   business: {
