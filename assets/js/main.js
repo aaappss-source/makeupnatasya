@@ -13,6 +13,14 @@ const CONFIG = {
   // Sebelum online, kembalikan ke nomor Natasya: "6285171502605"
   waNumber: "62895396797368",
 
+  // Isi portofolio & testimoni bisa diubah Natasya lewat Google Sheets.
+  // Isi dengan link "Publikasikan ke web" format CSV (lihat PANDUAN-NATASYA.md).
+  // Kosong = website memakai isi bawaan di index.html.
+  sheets: {
+    portfolioCsv: "",
+    testimonialsCsv: "",
+  },
+
   business: {
     name: "Natasya Makeup",
     description: "MUA bersertifikat di Depok untuk wisuda, lamaran, akad, bridesmaid, tari, photoshoot, dan makeup fantasi.",
@@ -101,20 +109,193 @@ function initPanLayout() {
 }
 
 /* ---------- Filter portofolio ---------- */
+function applyGalleryFilter() {
+  const active = document.querySelector('.chip[aria-pressed="true"]');
+  const filter = active ? active.dataset.filter : "semua";
+  document.querySelectorAll(".shot").forEach((shot) => {
+    shot.hidden = filter !== "semua" && shot.dataset.category !== filter;
+  });
+}
+
 function initGalleryFilter() {
   const chips = document.querySelectorAll(".chip");
-  const shots = document.querySelectorAll(".shot");
   if (!chips.length) return;
 
   chips.forEach((chip) => {
     chip.addEventListener("click", () => {
-      const filter = chip.dataset.filter;
       chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
-      shots.forEach((shot) => {
-        shot.hidden = filter !== "semua" && shot.dataset.category !== filter;
-      });
+      applyGalleryFilter();
     });
   });
+}
+
+/* ---------- Isi dari Google Sheets (portofolio & testimoni) ---------- */
+const GALLERY_CATEGORIES = ["wisuda", "lamaran", "bridesmaid", "tari", "lainnya"];
+const CATEGORY_ALIASES = {
+  akad: "lamaran",
+  "lamaran & akad": "lamaran",
+  "lamaran dan akad": "lamaran",
+  fantasi: "tari",
+  "tari & fantasi": "tari",
+  photoshoot: "lainnya",
+  reguler: "lainnya",
+  regular: "lainnya",
+};
+const CATEGORY_LABELS = {
+  wisuda: "Wisuda",
+  lamaran: "Lamaran & akad",
+  bridesmaid: "Bridesmaid",
+  tari: "Tari & fantasi",
+  lainnya: "Lainnya",
+};
+
+// Parser CSV kecil: mendukung tanda kutip, koma, dan baris baru di dalam sel.
+function parseCsv(text) {
+  const rows = [];
+  let row = [], cell = "", quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') quoted = false;
+      else cell += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r") {
+      if (c === "\r" && text[i + 1] === "\n") i++;
+      row.push(cell); cell = "";
+      rows.push(row); row = [];
+    } else cell += c;
+  }
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+function csvToObjects(text) {
+  const rows = parseCsv(text.replace(/^\uFEFF/, ""));
+  if (rows.length < 2) return [];
+  const head = rows[0].map((h) => h.trim().toLowerCase());
+  return rows.slice(1)
+    .filter((r) => r.some((v) => v.trim() !== ""))
+    .map((r) => Object.fromEntries(head.map((h, i) => [h, (r[i] || "").trim()])));
+}
+
+async function fetchRows(url) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 7000);
+  try {
+    const res = await fetch(url, { signal: ctrl.signal });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return csvToObjects(await res.text());
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Link foto dari Google Drive (atau link https lain) -> alamat gambar yang bisa dipakai <img>.
+function imageUrl(raw, width) {
+  const v = (raw || "").trim();
+  if (!v) return null;
+  if (/^https:\/\/(drive|docs)\.google\.com\//.test(v)) {
+    const m = v.match(/\/d\/([\w-]{10,})/) || v.match(/[?&]id=([\w-]{10,})/);
+    return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w${width}` : null;
+  }
+  return /^https:\/\//.test(v) ? v : null;
+}
+
+function isHidden(row) {
+  return /^(tidak|no|false|0|sembunyi)/i.test((row.tampil || "").trim());
+}
+
+function normalizeCategory(raw) {
+  const k = (raw || "").trim().toLowerCase();
+  if (GALLERY_CATEGORIES.includes(k)) return k;
+  return CATEGORY_ALIASES[k] || "lainnya";
+}
+
+function renderGallery(rows) {
+  const list = document.querySelector(".gallery");
+  if (!list) return;
+  const items = [];
+  rows.forEach((row) => {
+    if (isHidden(row)) return;
+    const src = imageUrl(row.foto, 900);
+    if (!src) return;
+    const category = normalizeCategory(row.kategori);
+    const caption = row.keterangan || CATEGORY_LABELS[category];
+
+    const li = document.createElement("li");
+    li.className = "shot";
+    li.dataset.category = category;
+    const fig = document.createElement("figure");
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = row.keterangan ? row.keterangan : `Hasil makeup ${CATEGORY_LABELS[category].toLowerCase()}`;
+    img.width = 800;
+    img.height = 1000;
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.referrerPolicy = "no-referrer";
+    img.addEventListener("error", () => li.remove());
+    const cap = document.createElement("figcaption");
+    cap.textContent = caption;
+    fig.append(img, cap);
+    li.append(fig);
+    items.push(li);
+  });
+  if (!items.length) return;
+  list.replaceChildren(...items);
+  applyGalleryFilter();
+}
+
+function renderTestimonials(rows) {
+  const box = document.querySelector(".bubbles");
+  if (!box) return;
+  const items = [];
+  rows.forEach((row) => {
+    if (isHidden(row)) return;
+    const src = imageUrl(row.foto, 900);
+    if (src) {
+      const fig = document.createElement("figure");
+      fig.className = "bubble bubble-shot";
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = row.nama ? `Chat testimoni dari ${row.nama}` : "Chat testimoni dari klien";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.referrerPolicy = "no-referrer";
+      img.addEventListener("error", () => fig.remove());
+      fig.append(img);
+      if (row.nama) {
+        const cap = document.createElement("figcaption");
+        cap.textContent = row.nama;
+        fig.append(cap);
+      }
+      items.push(fig);
+    } else if (row.teks) {
+      const bq = document.createElement("blockquote");
+      bq.className = "bubble";
+      const p = document.createElement("p");
+      p.textContent = row.teks;
+      bq.append(p);
+      if (row.nama) {
+        const cite = document.createElement("cite");
+        cite.textContent = row.nama;
+        bq.append(cite);
+      }
+      items.push(bq);
+    }
+  });
+  if (!items.length) return;
+  box.replaceChildren(...items);
+}
+
+// Kalau link Sheets kosong, gagal dimuat, atau isinya kosong,
+// isi bawaan di index.html tetap tampil.
+function initSheets() {
+  const { portfolioCsv, testimonialsCsv } = CONFIG.sheets;
+  if (portfolioCsv) fetchRows(portfolioCsv).then(renderGallery).catch(() => {});
+  if (testimonialsCsv) fetchRows(testimonialsCsv).then(renderTestimonials).catch(() => {});
 }
 
 /* ---------- Form booking ke WhatsApp ---------- */
@@ -326,6 +507,7 @@ document.addEventListener("DOMContentLoaded", () => {
   injectStructuredData();
   initLooks();
   initGalleryFilter();
+  initSheets();
   initBookingForm();
   initScrollUI();
   const year = document.getElementById("year");

@@ -430,6 +430,10 @@ a:hover { color: var(--berry-tua); }
 }
 .bubble:nth-child(even) { margin-left: clamp(0rem, 4vw, 2.5rem); }
 .bubble p { font-size: 1.0625rem; }
+.bubble cite { display: block; margin-top: 0.5rem; font-size: var(--fs-sm); font-style: normal; color: var(--abu-plum); }
+.bubble-shot { padding: 0.5rem; border-radius: 20px 20px 20px 6px; }
+.bubble-shot img { display: block; width: 100%; height: auto; border-radius: 14px; background: var(--garis); }
+.bubble-shot figcaption { margin: 0.5rem 0.6rem 0.2rem; font-size: var(--fs-sm); color: var(--abu-plum); }
 .todo-note { margin-top: 1.5rem; font-size: var(--fs-sm); color: var(--abu-plum); }
 
 /* ---------- Tentang ---------- */
