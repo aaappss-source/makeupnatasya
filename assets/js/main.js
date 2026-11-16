@@ -48,6 +48,17 @@ const CONFIG = {
   },
 };
 
+// Jawaban "Tahu Natasya Makeup dari mana?" (value di form -> teks)
+const SUMBER_NAMES = {
+  whatsapp: "WhatsApp",
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  google: "Google",
+  iklan: "Iklan",
+  teman: "Dari teman",
+  lainnya: "Lainnya",
+};
+
 const LOOK_NAMES = {
   wisuda: "Wisuda",
   lamaran: "Lamaran",
@@ -525,6 +536,7 @@ function buildMessage(data) {
   if (data.jam) lines.push(`Makeup selesai jam: ${data.jam}`);
   lines.push(`Lokasi: ${data.lokasi}`);
   lines.push(`Jumlah orang: ${data.jumlah}`);
+  if (data.sumber) lines.push(`Tahu Natasya Makeup dari: ${SUMBER_NAMES[data.sumber] || data.sumber}`);
   if (data.catatan) lines.push(`Catatan: ${data.catatan}`);
   lines.push("", "Apakah jadwalnya masih tersedia?");
   return lines.join("\n");
@@ -546,6 +558,7 @@ function initBookingForm() {
     jam: form.elements.jam,
     lokasi: form.elements.lokasi,
     jumlah: form.elements.jumlah,
+    sumber: form.elements.sumber,
     catatan: form.elements.catatan,
   };
 
@@ -572,6 +585,7 @@ function initBookingForm() {
       jam: v.jam,
       lokasi: v.lokasi,
       jumlah: v.jumlah,
+      sumber: SUMBER_NAMES[v.sumber] || v.sumber,
       catatan: v.catatan,
       website: trap ? trap.value : "",
     });
@@ -589,6 +603,7 @@ function initBookingForm() {
     jam: fields.jam.value,
     lokasi: fields.lokasi.value.trim(),
     jumlah: fields.jumlah.value,
+    sumber: fields.sumber.value,
     catatan: fields.catatan.value.trim(),
   });
 
@@ -598,6 +613,7 @@ function initBookingForm() {
     tanggal: (v) => v.tanggal !== "" && v.tanggal >= todayISO(),
     lokasi: (v) => v.lokasi.length > 0,
     jumlah: (v) => Number(v.jumlah) >= 1,
+    sumber: (v) => v.sumber in SUMBER_NAMES,
   };
 
   const setError = (name, show) => {

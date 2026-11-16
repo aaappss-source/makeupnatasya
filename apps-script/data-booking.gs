@@ -11,7 +11,7 @@
  */
 
 const NAMA_TAB = 'Booking';
-const KOLOM_ID = 11;          // kolom K, disembunyikan
+const KOLOM_ID = 12;          // kolom L, disembunyikan
 const MAKS_PER_MENIT = 20;    // pengaman dari kiriman spam
 
 function doPost(e) {
@@ -33,6 +33,7 @@ function simpanBooking_(d) {
   const nama = teks_(d.nama, 80);
   const look = teks_(d.look, 40);
   const lokasi = teks_(d.lokasi, 150);
+  const sumber = teks_(d.sumber, 40);              // "Tahu dari"; boleh kosong dari versi website lama
   const catatan = teks_(d.catatan, 500);
   const tgl = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d.tanggal || ''));
   const jam = /^\d{2}:\d{2}$/.test(String(d.jam || '')) ? String(d.jam) : '';
@@ -53,7 +54,7 @@ function simpanBooking_(d) {
   kunciTulis.waitLock(10000);
   try {
     const tab = ss.getSheetByName(NAMA_TAB);
-    const data = [new Date(), nama, look, tanggal, jam, lokasi, jumlah, catatan];
+    const data = [new Date(), nama, look, tanggal, jam, lokasi, jumlah, sumber, catatan];
     const akhir = tab.getLastRow();
     if (akhir >= 2) {
       const ids = tab.getRange(2, KOLOM_ID, akhir - 1, 1).getValues();
@@ -83,7 +84,7 @@ function tesSimpan() {
   const hasil = simpanBooking_({
     id: 'tes-' + Date.now(), nama: 'Tes dari editor', look: 'Wisuda',
     tanggal: Utilities.formatDate(new Date(), 'Asia/Jakarta', 'yyyy-MM-dd'),
-    jam: '07:30', lokasi: 'Cimanggis, Depok', jumlah: 1, catatan: 'Boleh dihapus',
+    jam: '07:30', lokasi: 'Cimanggis, Depok', jumlah: 1, sumber: 'Instagram', catatan: 'Boleh dihapus',
   });
   console.log('Hasil: ' + hasil);
 }

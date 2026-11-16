@@ -42,6 +42,10 @@ website harus diperbarui.
 
 ## Cara kerja & pengaman
 
+- Kolom di tab Booking: Waktu isi form, Nama, Jenis makeup, Tanggal acara, Makeup selesai jam, Lokasi,
+  Jumlah orang, Tahu dari, Catatan, Status, Keterangan, dan ID (kolom L, disembunyikan). Kalau urutan
+  kolom diubah, `KOLOM_ID` dan urutan `data` di skrip harus ikut diubah.
+
 - Satu isian form = satu baris. Kalau pengunjung mengubah isian lalu menekan kirim lagi, baris yang
   sama diperbarui; Status dan Keterangan yang sudah diisi tidak berubah. Setelah tombol
   **Kosongkan form**, isian berikutnya jadi baris baru.
