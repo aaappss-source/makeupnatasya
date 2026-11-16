@@ -16,6 +16,7 @@ natasya-makeup/
 │       ├── logo-tulisan-*.webp/png    # hero: tulisan NATASYA MAKEUP saja
 │       └── og-cover.jpg    # gambar preview saat link dibagikan (1200x630)
 ├── PANDUAN-NATASYA.md      # cara ganti foto & testimoni lewat Google Sheets
+├── EDIT-TEKS.md            # cara edit tulisan (harga, paket, FAQ, kontak) langsung di GitHub
 └── README.md
 ```
 
