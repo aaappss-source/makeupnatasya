@@ -9,9 +9,8 @@ const CONFIG = {
   // dan data SEO (JSON-LD) ikut nomor ini.
   // Format internasional: tanpa "+", tanpa 0 di depan.
   //
-  // SEMENTARA: nomor tes milik developer.
-  // Sebelum online, kembalikan ke nomor Natasya: "6285171502605"
-  waNumber: "62895396797368",
+  // Nomor Natasya (sesuai brosur: 085171502605).
+  waNumber: "6285171502605",
 
   // Foto & testimoni bisa diubah Natasya lewat Google Sheets.
   // spreadsheetId: kode di link spreadsheet, di antara /d/ dan /edit.
@@ -31,8 +30,8 @@ const CONFIG = {
 
   business: {
     name: "Natasya Makeup",
-    description: "MUA bersertifikat di Depok untuk wisuda, lamaran, akad, bridesmaid, tari, photoshoot, dan makeup fantasi.",
-    city: "Depok",
+    description: "MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, bridesmaid, dan makeup regular, termasuk hijab do. Juga akad, tari, photoshoot, dan makeup fantasi.",
+    city: "Cimanggis, Depok",
     region: "Jawa Barat",
     areaServed: ["Depok", "Jabodetabek"],
     instagram: [

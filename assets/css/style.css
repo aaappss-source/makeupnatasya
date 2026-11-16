@@ -104,9 +104,11 @@ a:hover { color: var(--berry-tua); }
   white-space: nowrap;
 }
 
-/* Konten draf ditandai atribut data-draft (tidak mengubah tampilan).
-   Aktifkan baris di bawah untuk melihat mana saja yang masih draf:
-   [data-draft] { outline: 1.5px dashed #8A3456; outline-offset: 2px; } */
+/* SEMENTARA: info yang belum ada di brosur Natasya ditandai tulisan kuning.
+   Setelah dicek: hapus aturan ini, lalu hapus atribut data-draft (atau
+   elemennya) di index.html. */
+[data-draft],
+[data-draft] * { color: #E5B000 !important; }
 
 /* ---------- Tombol ---------- */
 .btn {

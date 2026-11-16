@@ -22,22 +22,25 @@ fotonya di Google Drive. Foto yang belum diisi tampil sebagai kotak putih. Testi
 spreadsheet; kalau spreadsheet gagal dimuat, 5 testimoni teks bawaan di `index.html` yang tampil.
 Panduan lengkap: [PANDUAN-NATASYA.md](PANDUAN-NATASYA.md).
 
-## Konten draf (WAJIB dikonfirmasi Natasya sebelum online)
+## Sumber isi & penanda kuning
 
-Semua isi di bawah ini **karangan developer** supaya halaman terlihat jadi. Elemennya
-ditandai atribut `data-draft` (27 elemen). Cari `data-draft` di `index.html`, atau
-aktifkan baris komentar `[data-draft]` di `style.css` untuk melihatnya di browser.
-Setelah dikonfirmasi, hapus atribut `data-draft`-nya.
+Harga, paket, tambahan (add-on), lokasi, nomor WA, dan ketentuan booking diambil dari
+4 brosur Natasya: Terms & Conditions, Makeup Regular, Promo Makeup Lamaran, dan
+Graduation Makeup. Ketentuan booking masuk ke FAQ.
 
-- [ ] Harga "mulai dari" 8 jenis makeup. Patokan draf: MUA pemula umumnya
-      Rp250-350 ribu per orang untuk wisuda, MUA berpengalaman mulai Rp600 ribu (Orami).
-      Wisuda 350rb, lamaran 500rb, akad 1,2jt, bridesmaid 300rb/orang,
-      photoshoot 350rb, tari 250rb/orang, reguler 300rb, fantasi 400rb.
-- [ ] Isi paket ("Sudah termasuk") 8 jenis makeup
-- [ ] FAQ: transport gratis di Depok, home service, hijab do termasuk paket,
-      DP 50% + aturan reschedule/batal, durasi 60-90 menit, aturan rombongan
-- [ ] Izin klien untuk 5 testimoni (diambil dari highlight IG "Kata Mereka")
-- [ ] Deskripsi singkat tiap jenis makeup
+Info yang **tidak ada di brosur** belum dihapus, tapi ditandai atribut `data-draft` dan
+tampil **tulisan kuning** (aturan di bagian atas `style.css`). Sumbernya: Instagram
+(layanan akad/tari/photoshoot/fantasi, "Certified MUA sejak 2023", "born to be shining",
+@makeupnatasya) atau karangan developer (harga & isi paket akad/photoshoot/tari/fantasi,
+durasi, reschedule, area Jabodetabek, dll).
+
+Setelah dicek bersama Natasya: hapus elemen yang salah, lepas atribut `data-draft` dari
+yang benar, lalu hapus aturan kuning di `style.css`. Catatan: meta description & JSON-LD
+(tidak terlihat di halaman) juga masih menyebut "bersertifikat", akad/tari/photoshoot/fantasi,
+dan Jabodetabek.
+
+- [ ] Harga lamaran Rp250.000 adalah **harga promo**. Ubah kalau promonya selesai.
+- [ ] Izin klien untuk testimoni (diambil dari highlight IG "Kata Mereka").
 
 ## Yang masih harus diganti
 
@@ -49,10 +52,9 @@ Setelah dikonfirmasi, hapus atribut `data-draft`-nya.
       foto asli 1200x630 sebagai `assets/img/og-cover.jpg` lalu pasang lagi tag `og:image`
       dengan URL lengkap.
 - [ ] Domain final, lalu ganti `canonical` jadi URL lengkap
-- [ ] **Nomor WA masih nomor tes developer.** Sebelum online, ganti `waNumber` di
-      `assets/js/main.js` (CONFIG) ke nomor Natasya `6285171502605`. Semua link WA,
-      teks nomor, dan data SEO otomatis ikut. Konfirmasi juga nomornya ke Natasya.
-- [ ] Konfirmasi area layanan (Depok/Jabodetabek)
+- [x] Nomor WA sudah nomor Natasya `6285171502605` (sesuai brosur). Tes otomatis memakai
+      nomor tiruan dan memblokir WhatsApp, jadi tidak pernah mengirim ke Natasya.
+- [ ] Konfirmasi area layanan (brosur hanya menyebut Cimanggis, Depok dan gratis transport 5 km)
 
 ## Catatan teknis: palet "Pilih look"
 
