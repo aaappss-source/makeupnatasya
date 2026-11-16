@@ -11,7 +11,9 @@ natasya-makeup/
 │   ├── css/style.css       # token warna & font ada di :root paling atas
 │   ├── js/main.js          # nomor WA & ID Google Sheets ada di CONFIG paling atas
 │   └── img/
-│       ├── logo-240/480/880.webp, logo-480.png  # logo asli, latar dibuat transparan
+│       ├── logo-*.webp/png            # logo asli lengkap (footer), latar transparan
+│       ├── logo-mendatar-*.webp/png   # header: ikon kiri, tulisan kanan
+│       ├── logo-tulisan-*.webp/png    # hero: tulisan NATASYA MAKEUP saja
 │       └── og-cover.jpg    # gambar preview saat link dibagikan (1200x630)
 ├── PANDUAN-NATASYA.md      # cara ganti foto & testimoni lewat Google Sheets
 └── README.md

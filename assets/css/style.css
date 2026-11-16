@@ -32,7 +32,8 @@
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 28px;
-  --header-h: 76px;
+  --header-h: 72px;
+  --logo-h: 52px;
 }
 
 /* ---------- Dasar ---------- */
@@ -152,10 +153,12 @@ a:hover { color: var(--berry-tua); }
 }
 
 /* Logo asli Natasya (latar dibuat transparan, bentuk & warna tidak diubah) */
-.logo { display: inline-flex; flex-shrink: 0; margin: 0; }
-.logo img { display: block; height: calc(var(--header-h) - 12px); width: auto; }
+.logo { display: block; flex: 0 1 auto; min-width: 0; margin: 0; }
+/* Lebar mengikuti tinggi logo (rasio 3,875 : 1), tapi boleh mengecil kalau header sempit */
+.logo img { display: block; width: calc(var(--logo-h) * 3.875); max-width: 100%; height: auto; }
+.site-header .btn, .site-nav a { flex-shrink: 0; white-space: nowrap; }
 
-.site-nav { display: flex; gap: 1.75rem; margin-left: auto; }
+.site-nav { display: flex; flex-shrink: 0; gap: 1.75rem; margin-left: auto; }
 .site-nav a { color: var(--maskara); text-decoration: none; font-weight: 500; font-size: 0.9375rem; }
 .site-nav a:hover { color: var(--berry); }
 
@@ -170,7 +173,7 @@ a:hover { color: var(--berry-tua); }
 }
 
 .wordmark { margin: 0; line-height: 0; }
-.wordmark img { display: block; width: clamp(240px, 30vw, 420px); height: auto; }
+.wordmark img { display: block; width: clamp(280px, 36vw, 500px); max-width: 100%; height: auto; }
 
 
 .hero-tagline {
@@ -577,7 +580,9 @@ a:hover { color: var(--berry-tua); }
 
 @media (max-width: 760px) {
   .bubble-shot { --shot-max: 360px; }
-  :root { --header-h: 64px; }
+  :root { --header-h: 64px; --logo-h: 44px; }
+  /* Bar "Booking jadwal makeup" menempel di bawah: jangan sampai menutupi elemen yang difokus */
+  html { scroll-padding-bottom: 88px; }
 
   .site-nav { display: none; }
   .header-inner { justify-content: space-between; }
@@ -642,4 +647,14 @@ img.is-empty {
   background: #fff;
   outline: 1px solid var(--garis);
   outline-offset: -1px;
+}
+
+/* HP sangat kecil: logo header sedikit lebih kecil supaya tidak menabrak tombol Booking */
+@media (max-width: 340px) { :root { --logo-h: 38px; } }
+
+/* Tablet: menu masih tampil, jadi logo & jarak dibuat lebih ringkas */
+@media (min-width: 761px) and (max-width: 1080px) {
+  :root { --logo-h: 44px; }
+  .header-inner { gap: 1.25rem; }
+  .site-nav { gap: 1.1rem; }
 }
