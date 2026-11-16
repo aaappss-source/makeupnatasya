@@ -13,12 +13,20 @@ const CONFIG = {
   // Sebelum online, kembalikan ke nomor Natasya: "6285171502605"
   waNumber: "62895396797368",
 
-  // Isi portofolio & testimoni bisa diubah Natasya lewat Google Sheets.
-  // Isi dengan link "Publikasikan ke web" format CSV (lihat PANDUAN-NATASYA.md).
-  // Kosong = website memakai isi bawaan di index.html.
+  // Foto & testimoni bisa diubah Natasya lewat Google Sheets.
+  // spreadsheetId: kode di link spreadsheet, di antara /d/ dan /edit.
+  // Spreadsheet harus dibagikan "Siapa saja yang memiliki link: Pelihat".
+  // Kosong = website memakai foto & testimoni bawaan di index.html.
   sheets: {
-    portfolioCsv: "",
-    testimonialsCsv: "",
+    spreadsheetId: "15qbmT3pzQlUKdb3AlZXk-Zf__gRcN40_OAGzR2qoAgk",
+    tabs: {
+      photos: "Foto Utama",
+      portfolio: "Portofolio",
+      testimonials: "Testimoni",
+    },
+    // Cadangan: kalau cara baca langsung diblokir Google, isi dengan link
+    // "File > Bagikan > Publikasikan ke web" (format CSV) per tab.
+    csvUrls: { photos: "", portfolio: "", testimonials: "" },
   },
 
   business: {
@@ -186,7 +194,9 @@ async function fetchRows(url) {
   try {
     const res = await fetch(url, { signal: ctrl.signal });
     if (!res.ok) throw new Error("HTTP " + res.status);
-    return csvToObjects(await res.text());
+    const text = await res.text();
+    if (/^\s*</.test(text)) throw new Error("Bukan CSV");
+    return csvToObjects(text);
   } finally {
     clearTimeout(timer);
   }
@@ -290,12 +300,93 @@ function renderTestimonials(rows) {
   box.replaceChildren(...items);
 }
 
-// Kalau link Sheets kosong, gagal dimuat, atau isinya kosong,
-// isi bawaan di index.html tetap tampil.
+/* Foto tetap: hero, foto Natasya di Tentang, dan foto tiap look. */
+const PHOTO_SLOTS = {
+  hero: { selector: ".hero-mirror img", alt: "Hasil riasan Natasya Makeup", width: 1200 },
+  tentang: { selector: ".about-photo", alt: "Natasya, MUA di Depok", width: 1000 },
+};
+Object.keys(LOOK_NAMES).forEach((key) => {
+  PHOTO_SLOTS[`look-${key}`] = {
+    selector: `.look-detail[data-look="${key}"] .look-photo img`,
+    alt: `Contoh makeup ${LOOK_NAMES[key].toLowerCase()}`,
+    width: 1000,
+  };
+});
+
+// Foto di layar pertama: tunggu foto baru selesai dimuat dulu, baru ditukar,
+// supaya tidak sempat tampil foto lama.
+function swapWhenLoaded(img, src, alt) {
+  return new Promise((resolve) => {
+    const probe = new Image();
+    probe.referrerPolicy = "no-referrer";
+    probe.onload = () => {
+      img.referrerPolicy = "no-referrer";
+      img.removeAttribute("srcset");
+      img.src = src;
+      img.alt = alt;
+      resolve(true);
+    };
+    probe.onerror = () => resolve(false);
+    probe.src = src;
+  });
+}
+
+// Foto di bawah: langsung ganti (tetap lazy), balik ke foto bawaan kalau gagal.
+function swapLazy(img, src, alt) {
+  const fallback = img.getAttribute("src");
+  const fallbackAlt = img.alt;
+  img.referrerPolicy = "no-referrer";
+  img.addEventListener("error", () => {
+    if (img.getAttribute("src") !== fallback) {
+      img.src = fallback;
+      img.alt = fallbackAlt;
+    }
+  }, { once: true });
+  img.src = src;
+  img.alt = alt;
+}
+
+function renderPhotos(rows) {
+  let hero = Promise.resolve(false);
+  rows.forEach((row) => {
+    const slot = PHOTO_SLOTS[(row.bagian || "").trim().toLowerCase()];
+    if (!slot) return;
+    const img = document.querySelector(slot.selector);
+    const src = imageUrl(row.foto, slot.width);
+    if (!img || !src) return;
+    if (slot.selector === PHOTO_SLOTS.hero.selector) hero = swapWhenLoaded(img, src, slot.alt);
+    else swapLazy(img, src, slot.alt);
+  });
+  return hero;
+}
+
+function sheetUrl(key) {
+  const s = CONFIG.sheets;
+  if (s.csvUrls && s.csvUrls[key]) return s.csvUrls[key];
+  if (!s.spreadsheetId) return "";
+  return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(s.spreadsheetId)}` +
+    `/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(s.tabs[key])}`;
+}
+
+function revealHero() {
+  document.documentElement.classList.remove("sheet-wait");
+}
+
+// Kalau spreadsheet kosong, gagal dimuat, atau belum diisi,
+// foto & testimoni bawaan di index.html tetap tampil.
 function initSheets() {
-  const { portfolioCsv, testimonialsCsv } = CONFIG.sheets;
-  if (portfolioCsv) fetchRows(portfolioCsv).then(renderGallery).catch(() => {});
-  if (testimonialsCsv) fetchRows(testimonialsCsv).then(renderTestimonials).catch(() => {});
+  const photos = sheetUrl("photos");
+  const portfolio = sheetUrl("portfolio");
+  const testimonials = sheetUrl("testimonials");
+
+  if (photos) {
+    setTimeout(revealHero, 2500);
+    fetchRows(photos).then(renderPhotos).catch(() => {}).finally(revealHero);
+  } else {
+    revealHero();
+  }
+  if (portfolio) fetchRows(portfolio).then(renderGallery).catch(() => {});
+  if (testimonials) fetchRows(testimonials).then(renderTestimonials).catch(() => {});
 }
 
 /* ---------- Form booking ke WhatsApp ---------- */

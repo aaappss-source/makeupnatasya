@@ -76,8 +76,8 @@ lalu buka http://localhost:8000.
 Folder ini bisa langsung di-upload ke Netlify, Vercel, GitHub Pages, atau hosting biasa.
 
 
-## Mengganti foto portofolio & testimoni tanpa coding
+## Mengganti foto & testimoni tanpa coding
 
-Galeri portofolio dan testimoni bisa dikelola lewat Google Sheets + Google Drive.
-Panduan untuk Natasya dan langkah setup ada di [PANDUAN-NATASYA.md](PANDUAN-NATASYA.md).
-Template spreadsheet ada di `sheets-template/`. Link Sheets diisi di `CONFIG.sheets` pada `assets/js/main.js`.
+Semua foto (hero, foto Natasya, 8 foto Pilih look, galeri portofolio) dan testimoni diambil dari Google Sheets
+"Isi Website Natasya Makeup", dengan foto disimpan di Google Drive. Kalau spreadsheet tidak bisa dibaca,
+website memakai isi bawaan di `index.html`. Panduan lengkap: [PANDUAN-NATASYA.md](PANDUAN-NATASYA.md).
