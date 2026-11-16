@@ -60,14 +60,6 @@ Cocok untuk perubahan besar, karena hasilnya bisa dilihat dulu sebelum di-upload
 - **Kalau menambah atau menghapus jenis makeup**, ubah tiga tempat sekaligus: tombol palet (`pan`), kartu detailnya (`look-detail`), dan pilihan di form (`f-look`), lalu `LOOK_NAMES` di `assets/js/main.js`. Ini lebih aman dikerjakan dengan cara 3 supaya bisa dicek dulu.
 - **Commit ke `main` langsung tampil di website.** Kalau ada yang salah, buka file itu di GitHub, klik **History**, buka versi sebelumnya, lalu salin lagi isinya, atau minta bantuan untuk revert.
 
-## Tulisan kuning (penanda sementara)
-
-Tulisan kuning menandai info yang belum ada di brosur Natasya. Di kode, cirinya ada atribut `data-draft`.
-
-- Kalau info itu **benar**: hapus `data-draft` saja. Contoh: `<p data-draft>` jadi `<p>`, atau `<span data-draft>teks</span>` jadi `teks`.
-- Kalau info itu **salah**: hapus kalimat atau elemennya.
-- Kalau semua sudah dicek: hapus aturan warna kuning di bagian atas `assets/css/style.css` (cari `[data-draft]`).
-
 ## Setelah mengedit
 
 - Cek di laptop **dan** HP.

@@ -28,22 +28,14 @@ fotonya di Google Drive. Foto yang belum diisi tampil sebagai kotak putih. Testi
 spreadsheet; kalau spreadsheet gagal dimuat, 5 testimoni teks bawaan di `index.html` yang tampil.
 Panduan lengkap: [PANDUAN-NATASYA.md](PANDUAN-NATASYA.md).
 
-## Sumber isi & penanda kuning
+## Sumber isi
 
 Harga, paket, tambahan (add-on), lokasi, nomor WA, dan ketentuan booking diambil dari
 4 brosur Natasya: Terms & Conditions, Makeup Regular, Promo Makeup Lamaran, dan
 Graduation Makeup. Ketentuan booking masuk ke FAQ.
 
-Info yang **tidak ada di brosur** belum dihapus, tapi ditandai atribut `data-draft` dan
-tampil **tulisan kuning** (aturan di bagian atas `style.css`). Sumbernya: Instagram
-(layanan akad/tari/photoshoot/fantasi, "Certified MUA sejak 2023", "born to be shining",
-@makeupnatasya) atau karangan developer (harga & isi paket akad/photoshoot/tari/fantasi,
-durasi, reschedule, area Jabodetabek, dll).
-
-Setelah dicek bersama Natasya: hapus elemen yang salah, lepas atribut `data-draft` dari
-yang benar, lalu hapus aturan kuning di `style.css`. Catatan: meta description & JSON-LD
-(tidak terlihat di halaman) juga masih menyebut "bersertifikat", akad/tari/photoshoot/fantasi,
-dan Jabodetabek.
+Info yang tidak ada di brosur sudah dicek: sebagian dipertahankan, sebagian dihapus
+(17 Nov 2026). Penanda kuning (`data-draft`) sudah dilepas semua.
 
 - [ ] Harga lamaran Rp250.000 adalah **harga promo**. Ubah kalau promonya selesai.
 - [ ] Izin klien untuk testimoni (diambil dari highlight IG "Kata Mereka").

@@ -104,13 +104,6 @@ a:hover { color: var(--berry-tua); }
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-
-/* SEMENTARA: info yang belum ada di brosur Natasya ditandai tulisan kuning.
-   Setelah dicek: hapus aturan ini, lalu hapus atribut data-draft (atau
-   elemennya) di index.html. */
-[data-draft],
-[data-draft] * { color: #E5B000 !important; }
-
 /* ---------- Tombol ---------- */
 .btn {
   display: inline-flex;
