@@ -96,6 +96,8 @@ a:hover { color: var(--berry-tua); }
 }
 .skip-link:focus { top: 1rem; color: var(--kapas); }
 
+/* Kolom jebakan bot di form booking: tidak terlihat & tidak bisa difokus */
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .sr-only {
   position: absolute;
   width: 1px;

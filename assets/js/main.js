@@ -28,6 +28,13 @@ const CONFIG = {
     csvUrls: { photos: "", portfolio: "", testimonials: "" },
   },
 
+  // Data form booking dicatat ke spreadsheet "Data Booking Natasya Makeup" (privat).
+  // Isi dengan link Web App dari Apps Script (lihat PASANG-DATA-BOOKING.md).
+  // Kosong = tidak dicatat, form tetap jalan seperti biasa.
+  booking: {
+    logUrl: "",
+  },
+
   business: {
     name: "Natasya Makeup",
     description: "MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, bridesmaid, dan makeup regular, termasuk hijab do. Juga akad, tari, photoshoot, dan makeup fantasi.",
@@ -544,6 +551,37 @@ function initBookingForm() {
 
   fields.tanggal.min = todayISO();
 
+  // Satu isian form = satu ID. Kirim ulang (misal setelah ganti tanggal) memperbarui
+  // baris yang sama di spreadsheet; ID baru setelah form dikosongkan.
+  const newId = () => (window.crypto && crypto.randomUUID
+    ? crypto.randomUUID()
+    : Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 12));
+  let bookingId = newId();
+
+  // Catat ke spreadsheet saat tombol kirim ditekan, walaupun pesan WA tidak jadi dikirim.
+  // sendBeacon tetap terkirim meski halaman berpindah ke WhatsApp.
+  const logBooking = (v) => {
+    const url = CONFIG.booking && CONFIG.booking.logUrl;
+    if (!url) return;
+    const trap = form.elements.website;
+    const body = JSON.stringify({
+      id: bookingId,
+      nama: v.nama,
+      look: LOOK_NAMES[v.look] || v.look,
+      tanggal: v.tanggal,
+      jam: v.jam,
+      lokasi: v.lokasi,
+      jumlah: v.jumlah,
+      catatan: v.catatan,
+      website: trap ? trap.value : "",
+    });
+    try {
+      if (navigator.sendBeacon && navigator.sendBeacon(url, new Blob([body], { type: "text/plain;charset=utf-8" }))) return;
+    } catch (_) { /* lanjut ke fetch */ }
+    fetch(url, { method: "POST", mode: "no-cors", keepalive: true, body, headers: { "Content-Type": "text/plain;charset=utf-8" } })
+      .catch(() => {});
+  };
+
   const read = () => ({
     nama: fields.nama.value.trim(),
     look: fields.look.value,
@@ -604,7 +642,9 @@ function initBookingForm() {
     if (firstInvalid) {
       e.preventDefault();
       firstInvalid.focus();
+      return;
     }
+    logBooking(read());
   });
 
   // Tombol "Kosongkan form": nilai kembali ke default, error & link ikut bersih
@@ -612,6 +652,7 @@ function initBookingForm() {
   form.addEventListener("reset", () => {
     // tunggu browser selesai mengembalikan nilai default dulu
     setTimeout(() => {
+      bookingId = newId();
       Object.keys(rules).forEach((name) => setError(name, false));
       syncLink();
       fields.nama.focus();
@@ -619,7 +660,14 @@ function initBookingForm() {
     }, 0);
   });
 
-  // Tekan Enter di form = sama dengan tombol kirim
+  // Tekan Enter di kolom isian = sama dengan tombol kirim. (Browser tidak mengirim form
+  // ini lewat Enter dengan sendirinya karena tidak ada tombol submit.)
+  form.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.isComposing && e.target.matches("input:not([type=checkbox]):not([type=radio])")) {
+      e.preventDefault();
+      sendLink.click();
+    }
+  });
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     sendLink.click();

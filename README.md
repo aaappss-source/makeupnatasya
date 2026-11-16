@@ -17,6 +17,8 @@ natasya-makeup/
 │       └── og-cover.jpg    # gambar preview saat link dibagikan (1200x630)
 ├── PANDUAN-NATASYA.md      # cara ganti foto & testimoni lewat Google Sheets
 ├── EDIT-TEKS.md            # cara edit tulisan (harga, paket, FAQ, kontak) langsung di GitHub
+├── PASANG-DATA-BOOKING.md  # catat isian form booking ke Google Sheets (Apps Script)
+├── apps-script/data-booking.gs  # kode Apps Script untuk spreadsheet Data Booking
 └── README.md
 ```
 
