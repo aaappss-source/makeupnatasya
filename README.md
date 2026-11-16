@@ -9,22 +9,18 @@ natasya-makeup/
 ├── index.html              # semua konten halaman
 ├── assets/
 │   ├── css/style.css       # token warna & font ada di :root paling atas
-│   ├── js/main.js          # nomor WA ada di CONFIG paling atas
-│   └── img/
-│       ├── hero.jpg        # foto bulat di bagian atas (persegi, min 900x900)
-│       ├── profil.jpg      # foto di bagian "Halo, aku Natasya" (4:5)
-│       ├── og-cover.jpg    # gambar saat link dibagikan (1200x630)
-│       └── portfolio/      # foto hasil makeup (4:5, lebar 800-1200px)
+│   └── js/main.js          # nomor WA & ID Google Sheets ada di CONFIG paling atas
+├── PANDUAN-NATASYA.md      # cara ganti foto & testimoni lewat Google Sheets
 └── README.md
 ```
 
 ## Cara ganti foto
 
-Timpa file placeholder dengan foto asli **memakai nama file yang sama**. Kalau mau
-menambah foto portofolio, salin satu blok `<li class="shot">` di `index.html` dan isi
-`data-category` dengan salah satu: `wisuda`, `lamaran`, `bridesmaid`, `tari`, `lainnya`.
-
-Kompres foto dulu (misal lewat squoosh.app) supaya tiap file di bawah 200 KB.
+Semua foto **tidak disimpan di repo**. Foto hero, foto Natasya (Tentang), 8 foto Pilih look,
+dan galeri portofolio diambil dari Google Sheets "Isi Website Natasya Makeup", dengan file
+fotonya di Google Drive. Foto yang belum diisi tampil sebagai kotak putih. Testimoni juga dari
+spreadsheet; kalau spreadsheet gagal dimuat, 5 testimoni teks bawaan di `index.html` yang tampil.
+Panduan lengkap: [PANDUAN-NATASYA.md](PANDUAN-NATASYA.md).
 
 ## Konten draf (WAJIB dikonfirmasi Natasya sebelum online)
 
@@ -45,11 +41,14 @@ Setelah dikonfirmasi, hapus atribut `data-draft`-nya.
 
 ## Yang masih harus diganti
 
-- [ ] **Semua foto masih foto stok Pexels** (lihat `assets/img/CREDITS.md`). Bukan hasil
-      riasan Natasya. Wajib diganti foto asli sebelum online: hero, profil, 9 foto portofolio,
-      og-cover. Timpa file dengan nama yang sama.
-- [ ] Izin klien untuk foto portofolio asli
-- [ ] Domain final, lalu ganti `canonical` dan `og:image` jadi URL lengkap
+- [ ] **Isi semua foto di spreadsheet** (Foto Utama + Portofolio). Sebelum diisi, website
+      menampilkan kotak putih.
+- [ ] Izin klien untuk foto portofolio asli & screenshot chat testimoni
+- [ ] Gambar pratinjau saat link dibagikan di WhatsApp/sosmed (`og:image`) belum ada.
+      Tidak bisa dari spreadsheet karena WhatsApp tidak menjalankan JavaScript: simpan satu
+      foto asli 1200x630 sebagai `assets/img/og-cover.jpg` lalu pasang lagi tag `og:image`
+      dengan URL lengkap.
+- [ ] Domain final, lalu ganti `canonical` jadi URL lengkap
 - [ ] **Nomor WA masih nomor tes developer.** Sebelum online, ganti `waNumber` di
       `assets/js/main.js` (CONFIG) ke nomor Natasya `6285171502605`. Semua link WA,
       teks nomor, dan data SEO otomatis ikut. Konfirmasi juga nomornya ke Natasya.
@@ -75,9 +74,3 @@ lalu buka http://localhost:8000.
 
 Folder ini bisa langsung di-upload ke Netlify, Vercel, GitHub Pages, atau hosting biasa.
 
-
-## Mengganti foto & testimoni tanpa coding
-
-Semua foto (hero, foto Natasya, 8 foto Pilih look, galeri portofolio) dan testimoni diambil dari Google Sheets
-"Isi Website Natasya Makeup", dengan foto disimpan di Google Drive. Kalau spreadsheet tidak bisa dibaca,
-website memakai isi bawaan di `index.html`. Panduan lengkap: [PANDUAN-NATASYA.md](PANDUAN-NATASYA.md).

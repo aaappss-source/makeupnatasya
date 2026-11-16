@@ -236,12 +236,7 @@ a:hover { color: var(--berry-tua); }
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  transition: opacity 0.3s ease;
 }
-/* Selagi foto dari Google Sheets dimuat. Pengaman: tetap tampil setelah 3 detik. */
-.sheet-wait .hero-mirror img { opacity: 0; animation: tampil-paksa 0s 3s forwards; }
-@keyframes tampil-paksa { to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .hero-mirror img { transition: none; } }
 
 /* ---------- Section umum ---------- */
 .section { padding-block: var(--section-space); }
@@ -659,4 +654,11 @@ a:hover { color: var(--berry-tua); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* Kotak foto kosong: tampil putih sampai foto dari Google Sheets terisi. */
+img.is-empty {
+  background: #fff;
+  outline: 1px solid var(--garis);
+  outline-offset: -1px;
 }

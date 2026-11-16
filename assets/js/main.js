@@ -16,7 +16,7 @@ const CONFIG = {
   // Foto & testimoni bisa diubah Natasya lewat Google Sheets.
   // spreadsheetId: kode di link spreadsheet, di antara /d/ dan /edit.
   // Spreadsheet harus dibagikan "Siapa saja yang memiliki link: Pelihat".
-  // Kosong = website memakai foto & testimoni bawaan di index.html.
+  // Kosong = semua foto tampil sebagai kotak putih.
   sheets: {
     spreadsheetId: "15qbmT3pzQlUKdb3AlZXk-Zf__gRcN40_OAGzR2qoAgk",
     tabs: {
@@ -313,51 +313,32 @@ Object.keys(LOOK_NAMES).forEach((key) => {
   };
 });
 
-// Foto di layar pertama: tunggu foto baru selesai dimuat dulu, baru ditukar,
-// supaya tidak sempat tampil foto lama.
-function swapWhenLoaded(img, src, alt) {
-  return new Promise((resolve) => {
-    const probe = new Image();
-    probe.referrerPolicy = "no-referrer";
-    probe.onload = () => {
-      img.referrerPolicy = "no-referrer";
-      img.removeAttribute("srcset");
-      img.src = src;
-      img.alt = alt;
-      resolve(true);
-    };
-    probe.onerror = () => resolve(false);
-    probe.src = src;
-  });
-}
+// Gambar transparen 1x1: kotak foto tampil putih selama belum ada foto.
+const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
-// Foto di bawah: langsung ganti (tetap lazy), balik ke foto bawaan kalau gagal.
-function swapLazy(img, src, alt) {
-  const fallback = img.getAttribute("src");
-  const fallbackAlt = img.alt;
+// Pasang foto dari Sheets. Kalau gagal dimuat, kembali jadi kotak putih.
+function setPhoto(img, src, alt) {
   img.referrerPolicy = "no-referrer";
+  img.addEventListener("load", () => {
+    if (img.getAttribute("src") !== EMPTY_IMAGE) img.classList.remove("is-empty");
+  }, { once: true });
   img.addEventListener("error", () => {
-    if (img.getAttribute("src") !== fallback) {
-      img.src = fallback;
-      img.alt = fallbackAlt;
-    }
+    img.src = EMPTY_IMAGE;
+    img.alt = "";
+    img.classList.add("is-empty");
   }, { once: true });
   img.src = src;
   img.alt = alt;
 }
 
 function renderPhotos(rows) {
-  let hero = Promise.resolve(false);
   rows.forEach((row) => {
     const slot = PHOTO_SLOTS[(row.bagian || "").trim().toLowerCase()];
     if (!slot) return;
     const img = document.querySelector(slot.selector);
     const src = imageUrl(row.foto, slot.width);
-    if (!img || !src) return;
-    if (slot.selector === PHOTO_SLOTS.hero.selector) hero = swapWhenLoaded(img, src, slot.alt);
-    else swapLazy(img, src, slot.alt);
+    if (img && src) setPhoto(img, src, slot.alt);
   });
-  return hero;
 }
 
 function sheetUrl(key) {
@@ -368,23 +349,13 @@ function sheetUrl(key) {
     `/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(s.tabs[key])}`;
 }
 
-function revealHero() {
-  document.documentElement.classList.remove("sheet-wait");
-}
-
-// Kalau spreadsheet kosong, gagal dimuat, atau belum diisi,
-// foto & testimoni bawaan di index.html tetap tampil.
+// Foto yang belum diisi di Sheets (atau kalau Sheets gagal dimuat) tampil sebagai
+// kotak putih. Testimoni teks bawaan di index.html tetap tampil.
 function initSheets() {
   const photos = sheetUrl("photos");
   const portfolio = sheetUrl("portfolio");
   const testimonials = sheetUrl("testimonials");
-
-  if (photos) {
-    setTimeout(revealHero, 2500);
-    fetchRows(photos).then(renderPhotos).catch(() => {}).finally(revealHero);
-  } else {
-    revealHero();
-  }
+  if (photos) fetchRows(photos).then(renderPhotos).catch(() => {});
   if (portfolio) fetchRows(portfolio).then(renderGallery).catch(() => {});
   if (testimonials) fetchRows(testimonials).then(renderTestimonials).catch(() => {});
 }
