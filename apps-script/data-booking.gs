@@ -7,12 +7,17 @@
  *
  * Setiap tombol "Kirim ke WhatsApp" ditekan (form sudah lengkap), website mengirim
  * data ke sini. Satu isian form punya satu ID: kalau dikirim ulang, barisnya
- * diperbarui, Status & Keterangan tidak disentuh.
+ * diperbarui, Status pembayaran & Keterangan tidak disentuh.
+ *
+ * Kolom: A-I data form, J Status (otomatis dari rumus di sel J1, jangan ditulis skrip),
+ * K Status pembayaran (diisi manual), L Keterangan, M ID (disembunyikan).
  */
 
 const NAMA_TAB = 'Booking';
-const KOLOM_ID = 12;          // kolom L, disembunyikan
-const MAKS_PER_MENIT = 20;    // pengaman dari kiriman spam
+const KOLOM_STATUS_BAYAR = 11;              // kolom K
+const KOLOM_ID = 13;                        // kolom M, disembunyikan
+const STATUS_BAYAR_AWAL = 'Masih nanya-nanya';
+const MAKS_PER_MENIT = 20;                  // pengaman dari kiriman spam
 
 function doPost(e) {
   try {
@@ -55,23 +60,37 @@ function simpanBooking_(d) {
   try {
     const tab = ss.getSheetByName(NAMA_TAB);
     const data = [new Date(), nama, look, tanggal, jam, lokasi, jumlah, sumber, catatan];
-    const akhir = tab.getLastRow();
+    const akhir = barisTerakhir_(tab);
     if (akhir >= 2) {
       const ids = tab.getRange(2, KOLOM_ID, akhir - 1, 1).getValues();
       for (let i = ids.length - 1; i >= 0; i--) {
         if (String(ids[i][0]) === id) {
-          tab.getRange(i + 2, 1, 1, data.length).setValues([data]);   // Status & Keterangan tetap
+          tab.getRange(i + 2, 1, 1, data.length).setValues([data]);   // kolom J-L tetap
           rapikanFormat_(tab, i + 2);
           return 'diperbarui';
         }
       }
     }
-    tab.appendRow(data.concat(['Pending', '', id]));
-    rapikanFormat_(tab, tab.getLastRow());
+    const baris = akhir + 1;
+    if (baris > tab.getMaxRows()) tab.insertRowsAfter(tab.getMaxRows(), 200);
+    tab.getRange(baris, 1, 1, data.length).setValues([data]);
+    tab.getRange(baris, KOLOM_STATUS_BAYAR).setValue(STATUS_BAYAR_AWAL);   // Status (J) ikut rumus
+    tab.getRange(baris, KOLOM_ID).setValue(id);
+    rapikanFormat_(tab, baris);
     return 'baru';
   } finally {
     kunciTulis.releaseLock();
   }
+}
+
+// Baris terakhir yang berisi data, dilihat dari kolom A (Waktu isi form).
+// Tidak memakai getLastRow() karena rumus Status di J1 mengisi kolom J sampai bawah.
+function barisTerakhir_(tab) {
+  const n = tab.getMaxRows() - 1;
+  if (n < 1) return 1;
+  const kolA = tab.getRange(2, 1, n, 1).getValues();
+  for (let i = kolA.length - 1; i >= 0; i--) if (kolA[i][0] !== '' && kolA[i][0] !== null) return i + 2;
+  return 1;
 }
 
 // Sheets mengganti format sel jadi "tanggal + jam" setiap kali skrip menulis tanggal,

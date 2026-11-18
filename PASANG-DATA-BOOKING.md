@@ -2,8 +2,15 @@
 
 Setiap pengunjung menekan **Kirim ke WhatsApp** dengan form yang sudah lengkap, datanya masuk ke
 spreadsheet **Data Booking Natasya Makeup** (folder Google Drive *Website Natasya Makeup*), walaupun
-pesan WhatsApp-nya tidak jadi dikirim. Kolom **Status** (Berhasil / Gagal / Pending) dan
-**Keterangan** diisi manual.
+pesan WhatsApp-nya tidak jadi dikirim. Kolom **Status pembayaran** dan **Keterangan** diisi manual;
+kolom **Status** terisi otomatis dari Status pembayaran:
+
+| Status pembayaran (isi manual) | Status (otomatis) |
+|---|---|
+| Masih nanya-nanya (isian awal) | Pending |
+| Sudah DP | Follow Up |
+| Sudah lunas | Berhasil |
+| Tidak ada kabar | Gagal |
 
 Spreadsheet: https://docs.google.com/spreadsheets/d/1lFOk_K9MTq5SyMvRuqiAQ0zpXmiN9n0H8VmCqS1nLqs/edit
 
@@ -32,7 +39,7 @@ Langkah ini cukup sekali, sekitar 5 menit, dan harus dilakukan pemilik spreadshe
    (lihat [EDIT-TEKS.md](EDIT-TEKS.md)). Atau kirim URL-nya ke Claude untuk dipasang.
 8. **Tes dari website:** buka website, isi form sampai lengkap, tekan **Kirim ke WhatsApp**
    (tidak perlu benar-benar mengirim pesan di WhatsApp). Dalam beberapa detik baris baru muncul di
-   tab Booking dengan status **Pending**.
+   tab Booking dengan Status pembayaran **Masih nanya-nanya** dan Status **Pending**.
 
 ## Kalau skrip diubah nanti
 
@@ -43,11 +50,15 @@ website harus diperbarui.
 ## Cara kerja & pengaman
 
 - Kolom di tab Booking: Waktu isi form, Nama, Jenis makeup, Tanggal acara, Makeup selesai jam, Lokasi,
-  Jumlah orang, Tahu dari, Catatan, Status, Keterangan, dan ID (kolom L, disembunyikan). Kalau urutan
-  kolom diubah, `KOLOM_ID` dan urutan `data` di skrip harus ikut diubah.
+  Jumlah orang, Tahu dari, Catatan (A-I), Status (J), Status pembayaran (K), Keterangan (L), dan ID
+  (M, disembunyikan). Kalau urutan kolom diubah, `KOLOM_STATUS_BAYAR`, `KOLOM_ID`, dan urutan `data`
+  di skrip harus ikut diubah.
+- Status dihitung oleh satu rumus di sel **J1** (`ARRAYFORMULA`). Skrip tidak menulis ke kolom J, dan
+  baris baru dicari dari kolom A, bukan `getLastRow()`, karena rumus itu mengisi kolom J sampai bawah.
+  Kalau sel di kolom J diketik manual, rumus di J1 jadi error (#REF!); hapus ketikan itu untuk memperbaiki.
 
 - Satu isian form = satu baris. Kalau pengunjung mengubah isian lalu menekan kirim lagi, baris yang
-  sama diperbarui; Status dan Keterangan yang sudah diisi tidak berubah. Setelah tombol
+  sama diperbarui; Status pembayaran dan Keterangan yang sudah diisi tidak berubah. Setelah tombol
   **Kosongkan form**, isian berikutnya jadi baris baru.
 - Form yang belum lengkap (masih ada pesan error) tidak dicatat.
 - URL Web App tertulis di kode website, jadi siapa pun bisa mencoba mengirim data palsu. Pengaman yang
