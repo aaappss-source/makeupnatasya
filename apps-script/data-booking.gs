@@ -10,13 +10,17 @@
  * diperbarui, Status pembayaran & Keterangan tidak disentuh.
  *
  * Kolom: A-I data form, J Status (otomatis dari rumus di sel J1, jangan ditulis skrip),
- * K Status pembayaran (diisi manual), L Keterangan, M ID (disembunyikan).
+ * K Status pembayaran (diisi manual), L Keterangan, M ID (disembunyikan),
+ * N Masuk lewat (Website / Manual). Booking yang diketik manual juga boleh di tab ini.
  */
 
 const NAMA_TAB = 'Booking';
+const KOLOM_STATUS = 10;                    // kolom J, diisi rumus
 const KOLOM_STATUS_BAYAR = 11;              // kolom K
 const KOLOM_ID = 13;                        // kolom M, disembunyikan
+const KOLOM_MASUK = 14;                     // kolom N
 const STATUS_BAYAR_AWAL = 'Masih nanya-nanya';
+const MASUK_WEBSITE = 'Website';
 const MAKS_PER_MENIT = 20;                  // pengaman dari kiriman spam
 
 function doPost(e) {
@@ -76,6 +80,7 @@ function simpanBooking_(d) {
     tab.getRange(baris, 1, 1, data.length).setValues([data]);
     tab.getRange(baris, KOLOM_STATUS_BAYAR).setValue(STATUS_BAYAR_AWAL);   // Status (J) ikut rumus
     tab.getRange(baris, KOLOM_ID).setValue(id);
+    if (tab.getMaxColumns() >= KOLOM_MASUK) tab.getRange(baris, KOLOM_MASUK).setValue(MASUK_WEBSITE);
     rapikanFormat_(tab, baris);
     return 'baru';
   } finally {
@@ -83,13 +88,16 @@ function simpanBooking_(d) {
   }
 }
 
-// Baris terakhir yang berisi data, dilihat dari kolom A (Waktu isi form).
-// Tidak memakai getLastRow() karena rumus Status di J1 mengisi kolom J sampai bawah.
+// Baris terakhir yang berisi data. Dicek dari semua kolom kecuali J (Status), karena
+// rumus di J1 mengisi kolom J sampai bawah, dan baris yang diketik manual bisa saja
+// kolom A-nya lupa diisi. Dengan begini baris manual tidak pernah tertimpa.
 function barisTerakhir_(tab) {
   const n = tab.getMaxRows() - 1;
   if (n < 1) return 1;
-  const kolA = tab.getRange(2, 1, n, 1).getValues();
-  for (let i = kolA.length - 1; i >= 0; i--) if (kolA[i][0] !== '' && kolA[i][0] !== null) return i + 2;
+  const isi = tab.getRange(2, 1, n, Math.min(tab.getMaxColumns(), KOLOM_MASUK)).getValues();
+  for (let i = isi.length - 1; i >= 0; i--) {
+    if (isi[i].some((v, k) => k !== KOLOM_STATUS - 1 && v !== '' && v !== null)) return i + 2;
+  }
   return 1;
 }
 

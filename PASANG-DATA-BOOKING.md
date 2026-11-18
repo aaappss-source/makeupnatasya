@@ -47,14 +47,23 @@ Klik **Deploy > Manage deployments**, klik ikon pensil, pilih **Version: New ver
 **Deploy**. URL-nya tetap sama. Jangan buat **New deployment** lagi, karena URL-nya akan berubah dan
 website harus diperbarui.
 
+## Input booking manual
+
+Booking yang masuk lewat chat WA, DM, atau telepon diketik di baris kosong paling bawah tab **Booking**,
+supaya ikut terhitung di dashboard. Kolom Jenis makeup, Tahu dari, Status pembayaran, dan Masuk lewat
+berupa dropdown; kolom tanggal hanya menerima tanggal. Isi **Masuk lewat = Manual**, kosongkan kolom
+Status (otomatis) dan ID. Lokasi ditulis dengan format `Kecamatan, Kota` (contoh `Cimanggis, Depok`)
+supaya sama dengan isian dari website.
+
 ## Cara kerja & pengaman
 
 - Kolom di tab Booking: Waktu isi form, Nama, Jenis makeup, Tanggal acara, Makeup selesai jam, Lokasi,
-  Jumlah orang, Tahu dari, Catatan (A-I), Status (J), Status pembayaran (K), Keterangan (L), dan ID
-  (M, disembunyikan). Kalau urutan kolom diubah, `KOLOM_STATUS_BAYAR`, `KOLOM_ID`, dan urutan `data`
-  di skrip harus ikut diubah.
+  Jumlah orang, Tahu dari, Catatan (A-I), Status (J), Status pembayaran (K), Keterangan (L), ID
+  (M, disembunyikan), dan Masuk lewat (N: Website / Manual). Kalau urutan kolom diubah, konstanta
+  `KOLOM_...` dan urutan `data` di skrip harus ikut diubah.
 - Status dihitung oleh satu rumus di sel **J1** (`ARRAYFORMULA`). Skrip tidak menulis ke kolom J, dan
-  baris baru dicari dari kolom A, bukan `getLastRow()`, karena rumus itu mengisi kolom J sampai bawah.
+  baris baru dicari dari isi semua kolom selain J, bukan `getLastRow()`, karena rumus itu mengisi kolom J
+  sampai bawah. Baris yang diketik manual (walaupun kolom A-nya lupa diisi) tidak akan tertimpa.
   Kalau sel di kolom J diketik manual, rumus di J1 jadi error (#REF!); hapus ketikan itu untuk memperbaiki.
 
 - Satu isian form = satu baris. Kalau pengunjung mengubah isian lalu menekan kirim lagi, baris yang
