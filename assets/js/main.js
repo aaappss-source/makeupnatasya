@@ -1,7 +1,7 @@
 /* =========================================================
    Natasya Makeup — main.js
-   Fitur: pilih look, filter portofolio, form booking ke WhatsApp,
-   bar booking di HP, header saat scroll.
+   Fitur: pilih look, portofolio, form booking ke WhatsApp, tombol WhatsApp
+   melayang, bar booking di HP, header saat scroll.
    ========================================================= */
 
 const CONFIG = {
@@ -11,6 +11,20 @@ const CONFIG = {
   //
   // Nomor Natasya (sesuai brosur: 085171502605).
   waNumber: "6285171502605",
+
+  // Pesan yang langsung terisi saat pengunjung menekan tombol WhatsApp di pojok kanan bawah.
+  // Satu baris = satu teks di dalam tanda kutip. Spasi setelah titik dua sengaja dibiarkan
+  // supaya pelanggan tinggal mengetik jawabannya.
+  waChatText: [
+    "Halo Kak Natasya, aku mau tanya-tanya dulu soal makeup ya 😊",
+    "",
+    "Nama: ",
+    "Jenis makeup (wisuda/lamaran/akad/bridesmaid): ",
+    "Tanggal acara: ",
+    "Makeup harus selesai jam: ",
+    "Jumlah orang: ",
+    "Lokasi makeup (boleh langsung kirim share location): ",
+  ],
 
   // Foto & testimoni bisa diubah Natasya lewat Google Sheets.
   // spreadsheetId: kode di link spreadsheet, di antara /d/ dan /edit.
@@ -781,12 +795,30 @@ function initScrollUI() {
   io.observe(booking);
 }
 
+/* ---------- Tombol WhatsApp melayang ---------- */
+// Langsung membuka chat Natasya dengan draf pesan dari CONFIG.waChatText.
+function initWaFloat() {
+  const btn = document.getElementById("wa-float");
+  if (!btn) return;
+  btn.href = waUrl(CONFIG.waChatText.join("\n"));
+  btn.target = "_blank";
+  btn.rel = "noopener";
+
+  // Di HP tombol disembunyikan selama kolom form diketik, supaya tidak menutupi
+  // isian yang sedang diisi di atas keyboard.
+  const isField = (el) => el instanceof Element && el.matches("input, select, textarea");
+  const root = document.documentElement;
+  document.addEventListener("focusin", (e) => { if (isField(e.target)) root.classList.add("is-typing"); });
+  document.addEventListener("focusout", (e) => { if (isField(e.target)) root.classList.remove("is-typing"); });
+}
+
 /* ---------- Jalankan ---------- */
 document.documentElement.classList.add("js");
 
 document.addEventListener("DOMContentLoaded", () => {
   initPanLayout();
   initWaLinks();
+  initWaFloat();
   injectStructuredData();
   initLooks();
   initLookMore();

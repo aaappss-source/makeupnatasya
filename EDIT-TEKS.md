@@ -42,6 +42,7 @@ Cocok untuk perubahan besar, karena hasilnya bisa dilihat dulu sebelum di-upload
 | Lokasi, Instagram, footer | `index.html` | `site-footer` |
 | Judul di tab browser & Google, teks preview link | `index.html` (paling atas) | `<title>`, `name="description"`, `og:` |
 | Nomor WhatsApp | `assets/js/main.js` | `waNumber` |
+| Draf pesan tombol WhatsApp di pojok kanan bawah | `assets/js/main.js` | `waChatText` (satu baris pesan = satu teks dalam tanda kutip, diakhiri koma) |
 | Isi pesan WA otomatis dari form booking | `assets/js/main.js` | `buildMessage` |
 | Pilihan kota & kecamatan di form booking | `assets/js/main.js` | `LOKASI_MAKEUP` (satu baris per kota: `["Nama kota", ["Kecamatan", ...]]`) |
 | Pilihan jenis makeup di form | `index.html` dan `assets/js/main.js` | `f-look` (HTML) dan `LOOK_NAMES` (JS) |

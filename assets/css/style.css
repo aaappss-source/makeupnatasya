@@ -645,6 +645,30 @@ a:hover { color: var(--berry-tua); }
 .footer-contact { display: grid; gap: 0.5rem; max-width: 30rem; }
 .footer-bottom { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(235, 220, 224, 0.15); font-size: var(--fs-sm); }
 
+/* ---------- Tombol WhatsApp melayang ---------- */
+/* Hijau WhatsApp yang sedikit lebih gelap, supaya ikon putih tetap terbaca (kontras 3:1). */
+.wa-float {
+  --wa-size: 56px;
+  position: fixed;
+  right: 1.5rem;
+  bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  width: var(--wa-size);
+  height: var(--wa-size);
+  border-radius: 50%;
+  background: #1DA851;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(43, 23, 32, 0.25);
+  transition: background-color 0.2s, transform 0.2s ease, opacity 0.2s, visibility 0.2s;
+}
+.wa-float svg { width: 54%; height: 54%; }
+.wa-float:hover { background: #178F45; color: #fff; transform: translateY(-2px); }
+.wa-float:focus-visible { outline: 3px solid var(--rosegold); outline-offset: 3px; }
+/* Ruang kosong di bawah footer, supaya teks paling bawah tidak tertutup tombol. */
+.site-footer { padding-bottom: 7rem; }
+
 /* ---------- Bar booking mobile ---------- */
 .booking-bar { display: none; }
 
@@ -701,6 +725,12 @@ a:hover { color: var(--berry-tua); }
   }
   .booking-bar.is-visible { transform: translateY(0); visibility: visible; }
   .site-footer { padding-bottom: 6rem; }
+
+  /* Tombol WA menempati ujung kanan bar booking: posisinya sama baik bar tampil
+     maupun tidak, dan tidak pernah menutupi tombol "Booking jadwal makeup". */
+  .wa-float { --wa-size: 52px; right: var(--gutter); bottom: calc(0.625rem + env(safe-area-inset-bottom)); }
+  .booking-bar { padding-right: calc(var(--gutter) + 52px + 0.75rem); }
+  .is-typing .wa-float { opacity: 0; visibility: hidden; transform: scale(0.8); }
 }
 
 @media (max-width: 480px) {
