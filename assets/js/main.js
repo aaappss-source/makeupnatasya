@@ -448,8 +448,8 @@ function renderTestimonials(rows) {
 
 /* Foto tetap: hero, foto Natasya di Tentang, dan foto tiap look. */
 const PHOTO_SLOTS = {
-  hero: { selector: ".hero-mirror img", alt: "Natasya, makeup artist Natasya Makeup", width: 1200 },
-  tentang: { selector: ".about-photo", alt: "Natasya, MUA di Depok", width: 1000 },
+  hero: { selector: ".hero-mirror img", alt: "Natasya, makeup artist Natasya Makeup", width: 800 },
+  tentang: { selector: ".about-photo", alt: "Natasya, MUA di Depok", width: 900 },
 };
 Object.keys(LOOK_NAMES).forEach((key) => {
   PHOTO_SLOTS[`look-${key}`] = {

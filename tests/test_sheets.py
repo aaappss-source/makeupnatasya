@@ -123,7 +123,7 @@ with sync_playwright() as p:
     check("gviz dipanggil per tab dengan headers=1", len(reqs) == 3 and all("tqx=out:csv&headers=1&sheet=" in u for u in reqs), reqs)
     check("tidak ada request ke foto lama (assets/img)", not local, local)
     h = img_state(pg, ".hero-mirror img")
-    check("hero diganti foto dari sheet & tidak putih lagi", "thumbnail?id=1HHHH" in h["src"] and "sz=w1200" in h["src"] and h["ok"] and not h["empty"], h)
+    check("hero diganti foto dari sheet & tidak putih lagi", "thumbnail?id=1HHHH" in h["src"] and "sz=w800" in h["src"] and h["ok"] and not h["empty"], h)
     check("alt hero diisi", h["alt"] == "Natasya, makeup artist Natasya Makeup", h["alt"])
     a = img_state(pg, ".about-photo")
     check("foto Natasya (Tentang) diganti & termuat", "1TTTT" in a["src"] and a["ok"] and not a["empty"] and a["alt"] == "Natasya, MUA di Depok", a)
