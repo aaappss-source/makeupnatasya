@@ -13,7 +13,7 @@ Semua foto di website dan testimoni bisa diganti tanpa coding, cukup lewat **Goo
 2. **Salin link foto.** Tekan titik tiga (⋮) di samping foto, lalu **Salin link**.
 3. **Tempel di spreadsheet.** Buka aplikasi Google Sheets, buka *Isi Website Natasya Makeup*, lalu pilih tab:
    - **Foto Utama**: foto bulat besar paling atas (`hero`), foto Natasya di bagian Tentang (`tentang`), dan foto tiap jenis makeup di "Pilih look" (`look-wisuda`, `look-akad`, dst.). Tempel link di kolom **foto** pada baris yang sesuai.
-   - **Portofolio**: satu baris untuk satu foto hasil makeup. Pilih kategori dari daftar, tempel link, keterangan boleh kosong.
+   - **Portofolio**: satu baris untuk satu foto hasil makeup. Tempel link foto; keterangan boleh kosong (kalau diisi, tampil di bawah foto).
    - **Testimoni**: tempel link screenshot chat di kolom **foto**, atau tulis testimoninya di kolom **teks**.
 4. **Cek.** Kolom **pratinjau** menampilkan foto kalau link-nya benar. Website ikut berubah dalam beberapa menit. Tutup lalu buka ulang website-nya.
 

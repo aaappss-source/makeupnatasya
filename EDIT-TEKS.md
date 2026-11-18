@@ -49,7 +49,7 @@ Cocok untuk perubahan besar, karena hasilnya bisa dilihat dulu sebelum di-upload
 ## Aturan penting
 
 - **Ganti hanya tulisan di antara tag.** Contoh: di `<dd>Rp200.000</dd>`, yang diganti hanya `Rp200.000`. Jangan hapus `<`, `>`, `/`, atau tanda kutip `"`.
-- **Tanda `&` di kode ditulis `&amp;`.** Contoh: `Photoshoot &amp; model` tampil di website sebagai "Photoshoot & model".
+- **Tanda `&` di kode ditulis `&amp;`.** Contoh: `Lamaran &amp; akad` tampil di website sebagai "Lamaran & akad".
 - **Nomor WA ditulis format internasional tanpa `+` dan tanpa 0 di depan.** Contoh: 0851-7150-2605 ditulis `6285171502605`. Semua tombol WA, teks nomor, dan data Google ikut berubah otomatis.
 - **Satu info bisa ada di beberapa tempat.** Selalu cari dengan Ctrl+F atau Ctrl+Shift+F supaya semuanya ikut terganti:
   - harga bridesmaid/regular dan harga rombongan: kartu layanan + FAQ "Bisa booking untuk rombongan?"

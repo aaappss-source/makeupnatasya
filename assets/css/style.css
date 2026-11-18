@@ -394,22 +394,43 @@ a:hover { color: var(--berry-tua); }
   .look-detail h3 { font-size: 1.6rem; }
 }
 
+/* Laptop & layar besar: pilihan look di kiri atas, foto besar di bawahnya (selebar
+   kolom kiri), info di kanan. Panel & detail memakai display: contents supaya foto dan
+   info jadi bagian grid .compact. Tinggi foto mengikuti tinggi layar, jadi kotak gelap
+   tetap muat satu layar. */
+@media (min-width: 961px) {
+  .compact {
+    --pans-h: 6.5rem;
+    --compact-row-gap: 1.25rem;
+    --look-photo-h: clamp(320px, calc(100vh - var(--header-h) - 2 * var(--compact-pad) - var(--pans-h) - var(--compact-row-gap) - 24px), 640px);
+    --look-photo-h: clamp(320px, calc(100svh - var(--header-h) - 2 * var(--compact-pad) - var(--pans-h) - var(--compact-row-gap) - 24px), 640px);
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-template-rows: var(--pans-h) var(--look-photo-h);
+    grid-template-areas: "pans info" "photo info";
+    gap: var(--compact-row-gap) clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .compact:has(.look-detail.is-open) { grid-template-rows: var(--pans-h) auto; }
+  .pans { grid-area: pans; grid-template-columns: repeat(4, minmax(0, 1fr)); align-content: center; }
+  .pan-swatch { max-width: 60px; }
+  .look-panel,
+  .look-detail:not([hidden]) { display: contents; }
+  .look-photo { grid-area: photo; height: var(--look-photo-h); align-self: start; border-radius: var(--radius-md); }
+  .look-photo img { object-position: 50% 28%; }
+  .look-body {
+    grid-area: info;
+    min-height: 0;
+    padding: clamp(1.25rem, 2.2vw, 2rem);
+    border-radius: var(--radius-md);
+    background: var(--maskara-2);
+  }
+  .js .look-body { min-height: 0; }
+  .js .look-detail:not(.is-open) .look-body { height: auto; overflow: hidden; }
+  .look-detail h3 { font-size: clamp(1.75rem, 1.2rem + 1vw, 2.4rem); }
+}
+
 /* ---------- Portofolio ---------- */
 .portfolio { padding-top: 0; }
 
-.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
-.chip {
-  min-height: 40px;
-  padding: 0.45rem 1.1rem;
-  border: 1.5px solid var(--mauve);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--maskara);
-  font: 500 0.9375rem/1.2 var(--font-body);
-  cursor: pointer;
-}
-.chip:hover { border-color: var(--maskara); }
-.chip[aria-pressed="true"] { background: var(--maskara); border-color: var(--maskara); color: var(--kapas); }
 
 .gallery {
   display: grid;

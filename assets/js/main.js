@@ -37,7 +37,7 @@ const CONFIG = {
 
   business: {
     name: "Natasya Makeup",
-    description: "MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, bridesmaid, dan makeup regular, termasuk hijab do. Juga akad, tari, photoshoot, dan makeup fantasi.",
+    description: "MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, akad, dan bridesmaid, termasuk hijab do.",
     city: "Cimanggis, Depok",
     region: "Jawa Barat",
     areaServed: ["Depok", "Jabodetabek"],
@@ -85,10 +85,6 @@ const LOOK_NAMES = {
   lamaran: "Lamaran",
   akad: "Akad",
   bridesmaid: "Bridesmaid",
-  photoshoot: "Photoshoot & model",
-  tari: "Tari",
-  reguler: "Reguler",
-  fantasi: "Fantasi",
 };
 
 /* ---------- Pilih look (palet) ---------- */
@@ -227,33 +223,14 @@ function createPager({ list, button, itemSelector, perPage, isIncluded = () => t
   return { apply, reset() { pages = 1; apply(); } };
 }
 
-/* ---------- Filter portofolio ---------- */
+/* ---------- Portofolio ---------- */
 let galleryPager = null;
 
-function activeFilter() {
-  const active = document.querySelector('.chip[aria-pressed="true"]');
-  return active ? active.dataset.filter : "semua";
-}
-
-function initGalleryFilter() {
+function initGallery() {
   const list = document.querySelector(".gallery");
   const button = document.getElementById("gallery-load");
   if (!list || !button) return;
-  galleryPager = createPager({
-    list,
-    button,
-    itemSelector: ".shot",
-    perPage: { large: 9, small: 6 },
-    isIncluded: (shot) => activeFilter() === "semua" || shot.dataset.category === activeFilter(),
-  });
-
-  const chips = document.querySelectorAll(".chip");
-  chips.forEach((chip) => {
-    chip.addEventListener("click", () => {
-      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
-      galleryPager.reset();
-    });
-  });
+  galleryPager = createPager({ list, button, itemSelector: ".shot", perPage: { large: 9, small: 6 } });
   galleryPager.apply();
 }
 
@@ -289,25 +266,6 @@ function toggleShot(fig, toggle) {
 }
 
 /* ---------- Isi dari Google Sheets (portofolio & testimoni) ---------- */
-const GALLERY_CATEGORIES = ["wisuda", "lamaran", "bridesmaid", "tari", "lainnya"];
-const CATEGORY_ALIASES = {
-  akad: "lamaran",
-  "lamaran & akad": "lamaran",
-  "lamaran dan akad": "lamaran",
-  fantasi: "tari",
-  "tari & fantasi": "tari",
-  photoshoot: "lainnya",
-  reguler: "lainnya",
-  regular: "lainnya",
-};
-const CATEGORY_LABELS = {
-  wisuda: "Wisuda",
-  lamaran: "Lamaran & akad",
-  bridesmaid: "Bridesmaid",
-  tari: "Tari & fantasi",
-  lainnya: "Lainnya",
-};
-
 // Parser CSV kecil: mendukung tanda kutip, koma, dan baris baru di dalam sel.
 function parseCsv(text) {
   const rows = [];
@@ -368,12 +326,6 @@ function isHidden(row) {
   return /^(tidak|no|false|0|sembunyi)/i.test((row.tampil || "").trim());
 }
 
-function normalizeCategory(raw) {
-  const k = (raw || "").trim().toLowerCase();
-  if (GALLERY_CATEGORIES.includes(k)) return k;
-  return CATEGORY_ALIASES[k] || "lainnya";
-}
-
 function renderGallery(rows) {
   const list = document.querySelector(".gallery");
   if (!list) return;
@@ -382,16 +334,14 @@ function renderGallery(rows) {
     if (isHidden(row)) return;
     const src = imageUrl(row.foto, 900);
     if (!src) return;
-    const category = normalizeCategory(row.kategori);
-    const caption = row.keterangan || CATEGORY_LABELS[category];
+    const caption = (row.keterangan || "").trim();
 
     const li = document.createElement("li");
     li.className = "shot";
-    li.dataset.category = category;
     const fig = document.createElement("figure");
     const img = document.createElement("img");
     img.src = src;
-    img.alt = row.keterangan ? row.keterangan : `Hasil makeup ${CATEGORY_LABELS[category].toLowerCase()}`;
+    img.alt = caption || "Hasil makeup Natasya";
     img.width = 800;
     img.height = 1000;
     img.loading = "lazy";
@@ -401,9 +351,12 @@ function renderGallery(rows) {
       li.remove();
       if (galleryPager) galleryPager.apply();
     });
-    const cap = document.createElement("figcaption");
-    cap.textContent = caption;
-    fig.append(img, cap);
+    fig.append(img);
+    if (caption) {
+      const cap = document.createElement("figcaption");
+      cap.textContent = caption;
+      fig.append(cap);
+    }
     li.append(fig);
     items.push(li);
   });
@@ -837,7 +790,7 @@ document.addEventListener("DOMContentLoaded", () => {
   injectStructuredData();
   initLooks();
   initLookMore();
-  initGalleryFilter();
+  initGallery();
   initTestimonials();
   initSheets();
   initBookingForm();
