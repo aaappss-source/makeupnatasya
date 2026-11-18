@@ -15,15 +15,23 @@ const CONFIG = {
   // Pesan yang langsung terisi saat pengunjung menekan tombol WhatsApp di pojok kanan bawah.
   // Satu baris = satu teks di dalam tanda kutip. Spasi setelah titik dua sengaja dibiarkan
   // supaya pelanggan tinggal mengetik jawabannya.
+  // Baris "" = baris kosong, supaya tiap pertanyaan berjarak dan mudah diisi.
   waChatText: [
     "Halo Kak Natasya, aku mau tanya-tanya dulu soal makeup ya 😊",
     "",
     "Nama: ",
+    "",
     "Jenis makeup (wisuda/lamaran/akad/bridesmaid): ",
+    "",
     "Tanggal acara: ",
+    "",
     "Makeup harus selesai jam: ",
+    "",
     "Jumlah orang: ",
+    "",
     "Lokasi makeup (boleh langsung kirim share location): ",
+    "",
+    "Tahu Natasya dari (Instagram/TikTok/Google/teman/lainnya): ",
   ],
 
   // Foto & testimoni bisa diubah Natasya lewat Google Sheets.
