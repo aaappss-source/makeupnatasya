@@ -379,9 +379,18 @@
           </div>
 
           <div class="field">
-            <label for="f-lokasi">Lokasi makeup</label>
-            <input id="f-lokasi" name="lokasi" type="text" placeholder="Contoh: Cimanggis, Depok" required>
-            <p class="field-error" id="e-lokasi" hidden>Tulis lokasi makeup, cukup kecamatan dan kota.</p>
+            <label for="f-kota" id="l-lokasi">Lokasi makeup</label>
+            <div class="field-pair" role="group" aria-labelledby="l-lokasi">
+              <select id="f-kota" name="kota" aria-label="Kota" required>
+                <option value="">Pilih kota</option>
+              </select>
+              <select id="f-kecamatan" name="kecamatan" aria-label="Kecamatan" required disabled>
+                <option value="">Kecamatan</option>
+              </select>
+              <input id="f-lokasi-lain" name="lokasi_lain" type="text" maxlength="150" aria-label="Kecamatan dan kota" placeholder="Kecamatan, kota" hidden>
+            </div>
+            <p class="lokasi-lengkap" id="lokasi-lengkap" aria-hidden="true"></p>
+            <p class="field-error" id="e-lokasi" hidden>Pilih kota dan kecamatan lokasi makeup.</p>
           </div>
 
           <div class="field">

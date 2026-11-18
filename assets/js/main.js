@@ -59,6 +59,27 @@ const SUMBER_NAMES = {
   lainnya: "Lainnya",
 };
 
+/* Pilihan lokasi di form booking: kota/kabupaten Jabodetabek dan kecamatannya.
+   Dicocokkan dengan UU No. 101, 102, 118 Tahun 2024 (Kab. Bekasi, Kab. Bogor, Kab. Tangerang)
+   dan Perwal Kota Tangerang No. 24 Tahun 2018. Lokasi di luar daftar: pilihan "Kota lain". */
+const LOKASI_MAKEUP = [
+  ["Depok", ["Beji", "Bojongsari", "Cilodong", "Cimanggis", "Cinere", "Cipayung", "Limo", "Pancoran Mas", "Sawangan", "Sukmajaya", "Tapos"]],
+  ["Jakarta Timur", ["Cakung", "Cipayung", "Ciracas", "Duren Sawit", "Jatinegara", "Kramat Jati", "Makasar", "Matraman", "Pasar Rebo", "Pulo Gadung"]],
+  ["Jakarta Selatan", ["Cilandak", "Jagakarsa", "Kebayoran Baru", "Kebayoran Lama", "Mampang Prapatan", "Pancoran", "Pasar Minggu", "Pesanggrahan", "Setiabudi", "Tebet"]],
+  ["Jakarta Pusat", ["Cempaka Putih", "Gambir", "Johar Baru", "Kemayoran", "Menteng", "Sawah Besar", "Senen", "Tanah Abang"]],
+  ["Jakarta Barat", ["Cengkareng", "Grogol Petamburan", "Kalideres", "Kebon Jeruk", "Kembangan", "Palmerah", "Taman Sari", "Tambora"]],
+  ["Jakarta Utara", ["Cilincing", "Kelapa Gading", "Koja", "Pademangan", "Penjaringan", "Tanjung Priok"]],
+  ["Kota Bogor", ["Bogor Barat", "Bogor Selatan", "Bogor Tengah", "Bogor Timur", "Bogor Utara", "Tanah Sareal"]],
+  ["Kab. Bogor", ["Babakan Madang", "Bojonggede", "Caringin", "Cariu", "Ciampea", "Ciawi", "Cibinong", "Cibungbulang", "Cigombong", "Cigudeg", "Cijeruk", "Cileungsi", "Ciomas", "Cisarua", "Ciseeng", "Citeureup", "Dramaga", "Gunung Putri", "Gunung Sindur", "Jasinga", "Jonggol", "Kemang", "Klapanunggal", "Leuwiliang", "Leuwisadeng", "Megamendung", "Nanggung", "Pamijahan", "Parung", "Parung Panjang", "Rancabungur", "Rumpin", "Sukajaya", "Sukamakmur", "Sukaraja", "Tajurhalang", "Tamansari", "Tanjungsari", "Tenjo", "Tenjolaya"]],
+  ["Kota Bekasi", ["Bantargebang", "Bekasi Barat", "Bekasi Selatan", "Bekasi Timur", "Bekasi Utara", "Jatiasih", "Jatisampurna", "Medan Satria", "Mustika Jaya", "Pondok Gede", "Pondok Melati", "Rawalumbu"]],
+  ["Kab. Bekasi", ["Babelan", "Bojongmangu", "Cabangbungin", "Cibarusah", "Cibitung", "Cikarang Barat", "Cikarang Pusat", "Cikarang Selatan", "Cikarang Timur", "Cikarang Utara", "Karang Bahagia", "Kedungwaringin", "Muara Gembong", "Pebayuran", "Serang Baru", "Setu", "Sukakarya", "Sukatani", "Sukawangi", "Tambelang", "Tambun Selatan", "Tambun Utara", "Tarumajaya"]],
+  ["Tangerang Selatan", ["Ciputat", "Ciputat Timur", "Pamulang", "Pondok Aren", "Serpong", "Serpong Utara", "Setu"]],
+  ["Kota Tangerang", ["Batuceper", "Benda", "Cibodas", "Ciledug", "Cipondoh", "Jatiuwung", "Karang Tengah", "Karawaci", "Larangan", "Neglasari", "Periuk", "Pinang", "Tangerang"]],
+  ["Kab. Tangerang", ["Balaraja", "Cikupa", "Cisauk", "Cisoka", "Curug", "Gunung Kaler", "Jambe", "Jayanti", "Kelapa Dua", "Kemiri", "Kosambi", "Kresek", "Kronjo", "Legok", "Mauk", "Mekar Baru", "Pagedangan", "Pakuhaji", "Panongan", "Pasar Kemis", "Rajeg", "Sepatan", "Sepatan Timur", "Sindang Jaya", "Solear", "Sukadiri", "Sukamulya", "Teluknaga", "Tigaraksa"]],
+];
+const KOTA_LAIN = "lain";
+const KECAMATAN = Object.fromEntries(LOKASI_MAKEUP);
+
 const LOOK_NAMES = {
   wisuda: "Wisuda",
   lamaran: "Lamaran",
@@ -556,13 +577,32 @@ function initBookingForm() {
     look: form.elements.look,
     tanggal: form.elements.tanggal,
     jam: form.elements.jam,
-    lokasi: form.elements.lokasi,
+    kota: form.elements.kota,
+    kecamatan: form.elements.kecamatan,
+    lokasiLain: form.elements.lokasi_lain,
     jumlah: form.elements.jumlah,
     sumber: form.elements.sumber,
     catatan: form.elements.catatan,
   };
 
   fields.tanggal.min = todayISO();
+
+  // Lokasi: pilih kota, lalu kecamatan. "Kota lain" mengganti kotak kecamatan dengan kolom ketik.
+  LOKASI_MAKEUP.forEach(([kota]) => fields.kota.add(new Option(kota, kota)));
+  fields.kota.add(new Option("Kota lain", KOTA_LAIN));
+  const lokasiError = document.getElementById("e-lokasi");
+  const isiKecamatan = () => {
+    const kota = fields.kota.value;
+    const lain = kota === KOTA_LAIN;
+    const daftar = KECAMATAN[kota] || [];
+    fields.kecamatan.replaceChildren(new Option("Kecamatan", ""));
+    daftar.forEach((k) => fields.kecamatan.add(new Option(k, k)));
+    fields.kecamatan.disabled = !daftar.length;
+    fields.kecamatan.hidden = lain;
+    fields.lokasiLain.hidden = !lain;
+    if (!lain) fields.lokasiLain.value = "";
+  };
+  isiKecamatan();
 
   // Satu isian form = satu ID. Kirim ulang (misal setelah ganti tanggal) memperbarui
   // baris yang sama di spreadsheet; ID baru setelah form dikosongkan.
@@ -601,7 +641,11 @@ function initBookingForm() {
     look: fields.look.value,
     tanggal: fields.tanggal.value,
     jam: fields.jam.value,
-    lokasi: fields.lokasi.value.trim(),
+    kota: fields.kota.value,
+    kecamatan: fields.kecamatan.value,
+    lokasi: fields.kota.value === KOTA_LAIN
+      ? fields.lokasiLain.value.trim()
+      : (fields.kota.value && fields.kecamatan.value ? `${fields.kecamatan.value}, ${fields.kota.value}` : ""),
     jumlah: fields.jumlah.value,
     sumber: fields.sumber.value,
     catatan: fields.catatan.value.trim(),
@@ -611,13 +655,29 @@ function initBookingForm() {
     nama: (v) => v.nama.length > 0,
     look: (v) => v.look in LOOK_NAMES,
     tanggal: (v) => v.tanggal !== "" && v.tanggal >= todayISO(),
-    lokasi: (v) => v.lokasi.length > 0,
+    lokasi: (v) => (v.kota === KOTA_LAIN
+      ? v.lokasi.length > 0
+      : (KECAMATAN[v.kota] || []).includes(v.kecamatan)),
     jumlah: (v) => Number(v.jumlah) >= 1,
     sumber: (v) => v.sumber in SUMBER_NAMES,
   };
 
+  // Kolom yang ditandai salah untuk lokasi: kota dulu, lalu kecamatan / kolom ketik.
+  const lokasiTarget = () => {
+    if (!fields.kota.value) return fields.kota;
+    return fields.kota.value === KOTA_LAIN ? fields.lokasiLain : fields.kecamatan;
+  };
+  const targetOf = (name) => (name === "lokasi" ? lokasiTarget() : fields[name]);
+  const ruleOf = (inputName) => ({ kota: "lokasi", kecamatan: "lokasi", lokasi_lain: "lokasi" }[inputName] || inputName);
+
   const setError = (name, show) => {
-    const input = fields[name];
+    const input = targetOf(name);
+    if (name === "lokasi") {
+      [fields.kota, fields.kecamatan, fields.lokasiLain].forEach((el) => {
+        el.removeAttribute("aria-invalid");
+        el.removeAttribute("aria-describedby");
+      });
+    }
     const msg = document.getElementById(`e-${name}`);
     input.setAttribute("aria-invalid", String(show));
     if (msg) {
@@ -633,22 +693,33 @@ function initBookingForm() {
     Object.keys(rules).forEach((name) => {
       const ok = rules[name](values);
       setError(name, !ok);
-      if (!ok && !firstInvalid) firstInvalid = fields[name];
+      if (!ok && !firstInvalid) firstInvalid = targetOf(name);
     });
     return firstInvalid;
   };
 
-  // Link selalu berisi pesan terbaru, jadi klik biasa langsung membuka WA
-  const syncLink = () => { sendLink.href = waUrl(buildMessage(read())); };
+  // Link selalu berisi pesan terbaru, jadi klik biasa langsung membuka WA.
+  // Sekalian tulis lokasi lengkap di bawah dropdown (tampil di HP saja, lewat CSS).
+  const lokasiLengkap = document.getElementById("lokasi-lengkap");
+  const syncLink = () => {
+    const v = read();
+    sendLink.href = waUrl(buildMessage(v));
+    if (lokasiLengkap) lokasiLengkap.textContent = v.kota && v.kota !== KOTA_LAIN && v.lokasi ? `Lokasi: ${v.lokasi}` : "";
+  };
 
   form.addEventListener("input", (e) => {
     syncLink();
     const statusEl = document.getElementById("form-status");
     if (statusEl) statusEl.textContent = "";
-    const name = e.target.name;
-    if (rules[name] && e.target.getAttribute("aria-invalid") === "true") {
+    const name = ruleOf(e.target.name);
+    if (rules[name] && (e.target.getAttribute("aria-invalid") === "true" || (name === "lokasi" && !lokasiError.hidden))) {
       setError(name, !rules[name](read()));
     }
+  });
+  fields.kota.addEventListener("change", () => {
+    isiKecamatan();
+    if (!lokasiError.hidden) setError("lokasi", !rules.lokasi(read()));
+    if (fields.kota.value === KOTA_LAIN) fields.lokasiLain.focus();
   });
   form.addEventListener("change", syncLink);
 
@@ -669,6 +740,7 @@ function initBookingForm() {
     // tunggu browser selesai mengembalikan nilai default dulu
     setTimeout(() => {
       bookingId = newId();
+      isiKecamatan();
       Object.keys(rules).forEach((name) => setError(name, false));
       syncLink();
       fields.nama.focus();
