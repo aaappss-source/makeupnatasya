@@ -60,7 +60,7 @@ with sync_playwright() as p:
         gone = ["Riasan lembut yang tetap kelihatan di foto", "Klien paling sering bilang", "jarum pentul", "Reschedule bisa satu kali", "60 sampai 90 menit", "Berapa lama proses makeup"]
         check(f"{w}px: 5 kalimat yang diminta sudah terhapus", not [g for g in gone if g in body], [g for g in gone if g in body])
         keep = ["Banyak klien Natasya berhijab, dan hijab do juga termasuk di paket akad.",
-                "MUA bersertifikat sejak 2023, berdomisili di Cimanggis, Depok.", "DP tidak dikembalikan.", "Certified MUA sejak 2023", "born to be shining",
+                "Hallo calon client Natasya Makeup!", "DP tidak dikembalikan.", "Certified MUA sejak 2023", "born to be shining",
                 "Lokasinya bisa di rumah, gedung, atau dekat kampus.", "Melayani Depok dan sekitar Jabodetabek."]
         check(f"{w}px: kalimat yang tidak diminta tetap ada", not [k for k in keep if k not in body], [k for k in keep if k not in body])
         check(f"{w}px: FAQ tinggal 8 pertanyaan", pg.evaluate("document.querySelectorAll('.faq-list details').length") == 8)
