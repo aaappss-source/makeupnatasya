@@ -10,6 +10,8 @@ natasya-makeup/
 ├── assets/
 │   ├── css/style.css       # token warna & font ada di :root paling atas
 │   ├── js/main.js          # nomor WA & ID Google Sheets ada di CONFIG paling atas
+│   ├── js/galeri.js        # portofolio: klik foto -> tampil besar (geser, zoom, tutup)
+│   ├── vendor/photoswipe/  # library tampilan foto besar (PhotoSwipe 5.4.4, lisensi MIT)
 │   └── img/
 │       ├── logo-*.webp/png            # logo asli lengkap (footer), latar transparan
 │       ├── logo-mendatar-*.webp/png   # header: ikon kiri, tulisan kanan

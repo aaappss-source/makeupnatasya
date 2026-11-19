@@ -454,6 +454,34 @@ a:hover { color: var(--berry-tua); }
 
 .gallery-more { margin-top: 2rem; }
 
+/* Tampilan foto besar (PhotoSwipe, assets/js/galeri.js) */
+.shot img[data-full] { cursor: zoom-in; }
+.shot img[data-full]:focus-visible { outline: 3px solid var(--berry); outline-offset: 3px; }
+/* .pswp.pswp: menang dari photoswipe.css yang dimuat belakangan */
+.pswp.pswp {
+  --pswp-bg: #2B1720;
+  --pswp-icon-color: #FFFBFA;
+  --pswp-icon-color-secondary: #2B1720;
+  --pswp-icon-stroke-color: #2B1720;
+  --pswp-error-text-color: #FFFBFA;
+  font-family: var(--font-body);
+}
+/* Panah ganti foto tetap terlihat di HP (bawaan PhotoSwipe menyembunyikannya) */
+.pswp--touch .pswp__button--arrow { visibility: visible; }
+.pswp__caption-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(100%, 40rem);
+  padding: 0.75rem 1.25rem calc(1rem + env(safe-area-inset-bottom));
+  color: #FFFBFA;
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  text-align: center;
+  pointer-events: none;
+}
+
 /* Tombol "Lihat lebih banyak" (galeri & testimoni) */
 .load-more-wrap { display: flex; justify-content: center; }
 .load-more { margin-top: 1.75rem; }

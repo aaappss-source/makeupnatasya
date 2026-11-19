@@ -16,6 +16,7 @@ TESTS = [
     "test_lokasi.py",      # pilihan kota & kecamatan di form
     "test_booking_log.py", # data form terkirim ke Apps Script (tiruan)
     "test_wa_float.py",    # tombol WhatsApp melayang
+    "test_lightbox.py",    # portofolio: lihat foto besar, geser, tutup
     "test_appscript.js",   # logika Apps Script data booking
 ]
 

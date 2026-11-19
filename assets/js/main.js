@@ -369,6 +369,12 @@ function renderGallery(rows) {
     img.loading = "lazy";
     img.decoding = "async";
     img.referrerPolicy = "no-referrer";
+    // Untuk tampilan foto besar (assets/js/galeri.js)
+    img.dataset.full = imageUrl(row.foto, 1600);
+    img.dataset.caption = caption;
+    img.tabIndex = 0;
+    img.setAttribute("role", "button");
+    img.setAttribute("aria-label", `Lihat foto besar: ${img.alt}`);
     img.addEventListener("error", () => {
       li.remove();
       if (galleryPager) galleryPager.apply();
