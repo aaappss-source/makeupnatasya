@@ -41,7 +41,7 @@ with sync_playwright() as p:
             R = look(n)
             check(f"{w}px {n}: Rp175.000, 3+ Rp170.000, 5+ Rp165.000", all(x in R["txt"] for x in ["Rp175.000 per orang", "Rp170.000", "Rp165.000", "Bulu mata palsu, hijab do"]) and all(c != YELLOW for _, c in R["dd"]), R["dd"])
         check(f"{w}px teks baru: hero, wisuda, lamaran, akad segera hadir, domisili, FAQ hairdo Rp150.000",
-              all(s in pg.evaluate("document.body.textContent") for s in ["MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, akad, dan bridesmaid. Makeup, hijab do, dan hairdo, Natasya yang datang ke lokasimu. Melayani Depok dan sekitar Jabodetabek.",
+              all(s in pg.evaluate("document.body.textContent") for s in ["MUA yang berdomisili di Cimanggis, Depok. Aku percaya setiap perempuan punya pesona dan kecantikannya sendiri. Melalui makeup, aku ingin membantu kamu tampil lebih percaya diri, nyaman, dan bersinar di setiap momen spesial.", "Let's shine together, because you were born to be shining! ♡",
               "Sudah termasuk hijabdo dan pemasangan toga. Bisa untuk kamu yang berhijab maupun non-hijab.", "Tampil cantik dan percaya diri di hari spesialmu! Bebas request makeup sesuai look yang kamu inginkan.",
               "Natasya berdomisili di Cimanggis, Depok.", "Bisa! Hairdo ditangani oleh team hairstylist dengan harga mulai Rp150.000."])
               and "berbasis" not in pg.evaluate("document.body.textContent") and "Rp50.000" not in pg.evaluate("document.body.textContent")

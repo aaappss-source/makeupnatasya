@@ -178,6 +178,7 @@ a:hover { color: var(--berry-tua); }
   color: var(--abu-plum);
 }
 .hero-lead { max-width: 34rem; margin-top: 1.5rem; font-size: 1.125rem; }
+.hero-lead + .hero-lead { margin-top: 0.75rem; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 .hero-note { margin-top: 1.5rem; font-size: var(--fs-sm); color: var(--abu-plum); }
 
