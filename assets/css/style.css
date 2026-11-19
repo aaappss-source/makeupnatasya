@@ -467,7 +467,7 @@ a:hover { color: var(--berry-tua); }
   font-family: var(--font-body);
 }
 /* Panah ganti foto tetap terlihat di HP (bawaan PhotoSwipe menyembunyikannya) */
-.pswp--touch .pswp__button--arrow { visibility: visible; }
+.pswp.pswp--touch .pswp__button--arrow { visibility: visible; }
 .pswp__caption-bar {
   position: absolute;
   left: 50%;

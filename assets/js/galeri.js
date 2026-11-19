@@ -75,6 +75,23 @@ async function openViewer(index) {
       arrowPrevTitle: "Foto sebelumnya",
       arrowNextTitle: "Foto berikutnya",
       errorMsg: "Foto tidak bisa dimuat",
+      closeOnVerticalDrag: true,        // geser ke bawah untuk menutup
+      doubleTapAction: "zoom",          // ketuk 2x untuk zoom
+      imageClickAction: "zoom-or-close",
+    });
+
+    // Ukuran foto yang belum pernah termuat hanya perkiraan (4:5). Setelah foto besar
+    // termuat, pakai ukuran aslinya supaya tidak gepeng.
+    pswp.on("loadComplete", ({ content }) => {
+      const img = content.element;
+      if (!img || !img.naturalWidth) return;
+      const d = content.data;
+      const ratio = img.naturalWidth / img.naturalHeight;
+      if (Math.abs(ratio - d.width / d.height) / ratio > 0.01) {
+        d.width = img.naturalWidth;
+        d.height = img.naturalHeight;
+        pswp.refreshSlideContent(content.index);
+      }
     });
 
     // Foto dari Google Drive dimuat tanpa referrer, sama seperti di galeri.
@@ -98,6 +115,16 @@ async function openViewer(index) {
           });
         },
       });
+    });
+
+    // Tombol back HP menutup foto, bukan keluar dari website.
+    let closedByBack = false;
+    const onBack = () => { closedByBack = true; pswp.close(); };
+    history.pushState({ natasyaFoto: true }, "");
+    window.addEventListener("popstate", onBack);
+    pswp.on("close", () => {
+      window.removeEventListener("popstate", onBack);
+      if (!closedByBack && history.state && history.state.natasyaFoto) history.back();
     });
 
     pswp.on("destroy", () => { viewer = null; });

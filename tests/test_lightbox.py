@@ -154,6 +154,75 @@ with sync_playwright() as p:
     check("Sheets gagal: tidak ada error JS", not errors, errors)
     ctx.close()
 
+    # ---------- Task 2: back HP, geser, zoom, foto tersembunyi, proporsi ----------
+    from PIL import Image
+    import io
+    buf = io.BytesIO(); Image.new("RGB", (900, 600), (138, 52, 86)).save(buf, "JPEG"); LANDSCAPE = buf.getvalue()
+    ctx, pg, errors, vendor = open_page(thumb=lambda u: LANDSCAPE if "1LLLL" in u else None)
+    url0 = pg.url
+    hidden = pg.evaluate("document.querySelectorAll('.gallery .shot[hidden]').length")
+    shot(pg, 0).click(); wait_bar(pg, f"Foto 1 · 1 / {TOTAL}"); pg.wait_for_timeout(500)
+    pg.keyboard.press("ArrowLeft")
+    check("foto di balik 'Lihat lebih banyak' ikut (prev dari 1 -> Foto 12)", hidden > 0 and wait_bar(pg, f"Foto 12 · {TOTAL} / {TOTAL}"), (hidden, bar(pg)))
+    pg.wait_for_timeout(1500)
+    ratio = pg.evaluate("""(()=>{const s=[...document.querySelectorAll('.pswp__item')].find(i=>i.getAttribute('aria-hidden')==='false');
+      const im=s&&s.querySelector('img.pswp__img:not(.pswp__img--placeholder)'); if(!im||!im.naturalWidth) return null;
+      const r=im.getBoundingClientRect(); return [im.naturalWidth/im.naturalHeight, r.width/r.height]})()""")
+    check("proporsi foto benar setelah foto besar termuat (tidak gepeng)", ratio and abs(ratio[0] - ratio[1]) / ratio[0] < 0.03, ratio)
+    pg.keyboard.press("ArrowRight"); wait_bar(pg, f"Foto 1 · 1 / {TOTAL}"); pg.wait_for_timeout(400)
+    def drag(dx, dy):
+        bx = pg.evaluate("(()=>{const r=document.querySelector('.pswp__scroll-wrap').getBoundingClientRect();return [r.width/2, r.height/2]})()")
+        pg.mouse.move(bx[0], bx[1]); pg.mouse.down()
+        for k in range(1, 11): pg.mouse.move(bx[0] + dx * k / 10, bx[1] + dy * k / 10); pg.wait_for_timeout(16)
+        pg.mouse.up()
+    drag(-320, 0)
+    check("geser kiri -> foto berikutnya (2 / 11)", wait_bar(pg, f"Foto 2 · 2 / {TOTAL}"), bar(pg))
+    pg.wait_for_timeout(500)
+    pg.go_back()
+    check("tombol back menutup viewer", wait_closed(pg))
+    check("tombol back: tetap di website", pg.url == url0, pg.url)
+    if pg.url != url0:  # back keluar dari website (bug): muat ulang supaya cek lain tetap jalan
+        pg.goto(URL, wait_until="networkidle")
+        pg.evaluate("document.querySelector('#portofolio').scrollIntoView()"); pg.wait_for_timeout(800)
+    pg.wait_for_timeout(300)
+    shot(pg, 0).click(); wait_bar(pg, f"Foto 1 · 1 / {TOTAL}"); pg.wait_for_timeout(500)
+    tap(pg, ".pswp__button--close"); wait_closed(pg); pg.wait_for_timeout(300)
+    st = pg.evaluate("history.state && history.state.natasyaFoto")
+    check("tutup pakai X: tidak ada riwayat 'foto' tersisa", not st and pg.url == url0, (st, pg.url))
+    shot(pg, 0).click()
+    check("buka lagi setelah X tetap bisa", wait_bar(pg, f"Foto 1 · 1 / {TOTAL}"), bar(pg))
+    pg.wait_for_timeout(500)
+    drag(0, 320)
+    check("geser ke bawah menutup viewer", wait_closed(pg))
+    check("geser ke bawah: tidak ada riwayat 'foto' tersisa", not pg.evaluate("history.state && history.state.natasyaFoto"))
+    check("Task 2 laptop: tidak ada error JS", not errors, errors)
+    ctx.close()
+
+    # HP: panah terlihat, ketuk 2x zoom
+    ctx, pg, errors, vendor = open_page({"width": 375, "height": 760}, mobile=True)
+    shot(pg, 0).tap()
+    wait_bar(pg, f"Foto 1 · 1 / {TOTAL}"); pg.wait_for_timeout(600)
+    vis = pg.evaluate("getComputedStyle(document.querySelector('.pswp__button--arrow--next')).visibility")
+    check("HP: tombol panah terlihat", vis == "visible", vis)
+    pg.screenshot(path=str(OUT / "lightbox-hp.png"))
+    c = pg.evaluate("(()=>{const r=document.querySelector('.pswp__scroll-wrap').getBoundingClientRect();return [r.width/2, r.height/2]})()")
+    pg.touchscreen.tap(c[0], c[1]); pg.wait_for_timeout(120); pg.touchscreen.tap(c[0], c[1]); pg.wait_for_timeout(700)
+    check("HP: ketuk 2x -> zoom", pg.evaluate("document.querySelector('.pswp').classList.contains('pswp--zoomed-in')"),
+          pg.evaluate("document.querySelector('.pswp')?.className"))
+    check("HP: tidak ada error JS", not errors, errors)
+    ctx.close()
+
+    # Portofolio hanya 1 foto
+    one = '"foto","keterangan","tampil","pratinjau"\n"' + D("A") + '","Foto 1","",""\n'
+    ctx, pg, errors, vendor = open_page(porto=one)
+    shot(pg, 0).click()
+    check("satu foto: 'Foto 1 · 1 / 1'", wait_bar(pg, "Foto 1 · 1 / 1"), bar(pg))
+    pg.wait_for_timeout(500)
+    av = pg.evaluate("getComputedStyle(document.querySelector('.pswp__button--arrow--next')).display")
+    check("satu foto: tanpa tombol panah", av == "none", av)
+    check("satu foto: tidak ada error JS", not errors, errors)
+    ctx.close()
+
     b.close()
 
 httpd.shutdown()
