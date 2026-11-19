@@ -15,7 +15,7 @@ natasya-makeup/
 │       ├── logo-mendatar-*.webp/png   # header: ikon kiri, tulisan kanan
 │       ├── logo-tulisan-*.webp/png    # hero: tulisan NATASYA MAKEUP saja
 │       ├── natasya-hero-800.webp      # foto hero bawaan, tampil sebelum Google Sheets dimuat
-│       └── og-natasya.jpg  # gambar preview saat link dibagikan (1200x630, foto Natasya)
+│       └── og-cover.jpg    # gambar preview saat link dibagikan (1200x630)
 ├── PANDUAN-NATASYA.md      # cara ganti foto & testimoni lewat Google Sheets
 ├── EDIT-TEKS.md            # cara edit tulisan (harga, paket, FAQ, kontak) langsung di GitHub
 ├── PASANG-DATA-BOOKING.md  # catat isian form booking ke Google Sheets (Apps Script)
