@@ -59,7 +59,7 @@ const CONFIG = {
 
   business: {
     name: "Natasya Makeup",
-    description: "MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, akad, dan bridesmaid, termasuk hijab do.",
+    description: "MUA bersertifikat di Cimanggis, Depok. Makeup wisuda mulai Rp200.000, lamaran, akad & bridesmaid. Termasuk hijab do, awet, home service se-Jabodetabek.",
     city: "Cimanggis, Depok",
     region: "Jawa Barat",
     areaServed: ["Depok", "Jabodetabek"],
