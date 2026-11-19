@@ -32,14 +32,20 @@ with sync_playwright() as p:
               txt:a.innerText, dd:[...a.querySelectorAll('dd')].map(d=>[d.innerText,getComputedStyle(d).color]),
               h3:getComputedStyle(a.querySelector('h3')).color}}""", name)
         W = look("wisuda")
-        check(f"{w}px wisuda: Rp200.000, Rp380.000, toga, softlens Rp35.000, hairdo Rp50.000 (warna normal)",
-              all(x in W["txt"] for x in ["Rp200.000", "Rp380.000", "pemasangan toga", "Softlens normal Rp35.000", "hairdo mulai Rp50.000", "transport sampai 5 km"])
+        check(f"{w}px wisuda: Rp200.000, Rp380.000, toga, softlens Rp35.000, hairdo Rp150.000 (warna normal)",
+              all(x in W["txt"] for x in ["Rp200.000", "Rp380.000", "pemasangan toga", "Softlens normal Rp35.000", "hairdo mulai Rp150.000", "transport sampai 5 km"])
               and all(c != YELLOW for _, c in W["dd"]), W["dd"])
         L = look("lamaran")
-        check(f"{w}px lamaran: promo Rp250.000, softlens, body tone up", all(x in L["txt"] for x in ["Rp250.000", "Softlens", "body tone up", "Hairdo mulai Rp50.000"]) and all(c != YELLOW for _, c in L["dd"]), L["dd"])
+        check(f"{w}px lamaran: promo Rp250.000, softlens, body tone up", all(x in L["txt"] for x in ["Rp250.000", "Softlens", "body tone up", "Hairdo mulai Rp150.000"]) and all(c != YELLOW for _, c in L["dd"]), L["dd"])
         for n in ["bridesmaid"]:
             R = look(n)
             check(f"{w}px {n}: Rp175.000, 3+ Rp170.000, 5+ Rp165.000", all(x in R["txt"] for x in ["Rp175.000 per orang", "Rp170.000", "Rp165.000", "Bulu mata palsu, hijab do"]) and all(c != YELLOW for _, c in R["dd"]), R["dd"])
+        check(f"{w}px teks baru: hero, wisuda, lamaran, akad segera hadir, domisili, FAQ hairdo Rp150.000",
+              all(s in pg.evaluate("document.body.textContent") for s in ["MUA di Cimanggis, Depok untuk makeup wisuda, lamaran, akad, dan bridesmaid. Makeup, hijab do, dan hairdo, Natasya yang datang ke lokasimu. Melayani Depok dan sekitar Jabodetabek.",
+              "Sudah termasuk hijabdo dan pemasangan toga. Bisa untuk kamu yang berhijab maupun non-hijab.", "Tampil cantik dan percaya diri di hari spesialmu! Bebas request makeup sesuai look yang kamu inginkan.",
+              "Natasya berdomisili di Cimanggis, Depok.", "Bisa! Hairdo ditangani oleh team hairstylist dengan harga mulai Rp150.000."])
+              and "berbasis" not in pg.evaluate("document.body.textContent") and "Rp50.000" not in pg.evaluate("document.body.textContent")
+              and pg.evaluate("document.querySelector('.look-detail[data-look=akad] .look-info').innerText.trim()") == "Segera hadir.")
         for n in ["akad"]:
             X = look(n)
             check(f"{w}px {n}: tidak ada tulisan kuning lagi", X["h3"] != YELLOW and all(c != YELLOW for _, c in X["dd"]), (X["h3"], X["dd"]))
@@ -53,7 +59,7 @@ with sync_playwright() as p:
         body = pg.evaluate("document.body.textContent")
         gone = ["Riasan lembut yang tetap kelihatan di foto", "Klien paling sering bilang", "jarum pentul", "Reschedule bisa satu kali", "60 sampai 90 menit", "Berapa lama proses makeup"]
         check(f"{w}px: 5 kalimat yang diminta sudah terhapus", not [g for g in gone if g in body], [g for g in gone if g in body])
-        keep = ["Tampil lebih percaya diri di hari spesialmu.", "Banyak klien Natasya berhijab, dan hijab do juga termasuk di paket akad.",
+        keep = ["Banyak klien Natasya berhijab, dan hijab do juga termasuk di paket akad.",
                 "MUA bersertifikat sejak 2023, berdomisili di Cimanggis, Depok.", "DP tidak dikembalikan.", "Certified MUA sejak 2023", "born to be shining",
                 "Lokasinya bisa di rumah, gedung, atau dekat kampus.", "Melayani Depok dan sekitar Jabodetabek."]
         check(f"{w}px: kalimat yang tidak diminta tetap ada", not [k for k in keep if k not in body], [k for k in keep if k not in body])
