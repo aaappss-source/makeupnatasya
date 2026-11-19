@@ -463,7 +463,20 @@ Object.keys(LOOK_NAMES).forEach((key) => {
 const EMPTY_IMAGE = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
 // Pasang foto dari Sheets. Kalau gagal dimuat, kembali jadi kotak putih.
+// Kalau kotaknya sudah berisi foto bawaan (hero), foto baru diunduh dulu di belakang
+// dan baru ditukar setelah siap, jadi tidak ada kedipan putih. Gagal = foto bawaan tetap.
 function setPhoto(img, src, alt) {
+  if (!img.classList.contains("is-empty")) {
+    const pre = new Image();
+    pre.referrerPolicy = "no-referrer";
+    pre.addEventListener("load", () => {
+      img.referrerPolicy = "no-referrer";
+      img.src = src;
+      img.alt = alt;
+    }, { once: true });
+    pre.src = src;
+    return;
+  }
   img.referrerPolicy = "no-referrer";
   img.addEventListener("load", () => {
     if (img.getAttribute("src") !== EMPTY_IMAGE) img.classList.remove("is-empty");
@@ -483,6 +496,8 @@ function renderPhotos(rows) {
     if (!slot) return;
     const img = document.querySelector(slot.selector);
     const src = imageUrl(row.foto, slot.width);
+    // Foto di Sheets sama dengan foto bawaan: tidak perlu diunduh ulang dari Drive.
+    if (img && img.dataset.driveId && (row.foto || "").includes(img.dataset.driveId)) return;
     if (img && src) setPhoto(img, src, slot.alt);
   });
 }

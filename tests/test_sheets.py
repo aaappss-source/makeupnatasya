@@ -113,6 +113,7 @@ with sync_playwright() as p:
     EMPTY = "data:image/gif;base64,"
     def img_state(pg, sel):
         return pg.evaluate("(s)=>{const i=document.querySelector(s);return {src:i.getAttribute('src'),alt:i.alt,empty:i.classList.contains('is-empty'),ok:i.complete&&i.naturalWidth>0,bg:getComputedStyle(i).backgroundColor}}", sel)
+    HERO_LOCAL = "assets/img/natasya-hero-800.webp"
     PLACEHOLDER_JS = "[...document.querySelectorAll('img')].filter(i=>i.classList.contains('is-empty')&&i.getAttribute('src').startsWith('data:image/gif')).length"
 
     # 1. Normal
@@ -157,14 +158,14 @@ with sync_playwright() as p:
     check("mobile: tidak ada error JS", not errors, errors)
     ctx.close()
 
-    # 3. Sheet lambat (4 detik): kotak putih dulu, lalu foto
+    # 3. Sheet lambat (4 detik): hero foto bawaan dulu, lalu foto dari sheet
     base = "http://127.0.0.1:8767/?delay=4000&tab="
     ctx, pg, errors = open_page({"width": 1366, "height": 860}, csv_urls=tuple(base + urllib.parse.quote(t) for t in ["Foto Utama", "Portofolio", "Testimoni"]))
     gv = []
     pg.on("request", lambda r: gv.append(r.url) if "gviz" in r.url else None)
     pg.goto(URL, wait_until="domcontentloaded"); pg.wait_for_timeout(1500)
     h = img_state(pg, ".hero-mirror img")
-    check("sheet lambat: hero kotak putih dulu (bukan foto lama)", h["src"].startswith(EMPTY) and h["empty"] and h["bg"] == "rgb(255, 255, 255)", h)
+    check("sheet lambat: hero langsung tampil foto bawaan (bukan kotak putih)", h["src"] == HERO_LOCAL and h["ok"] and not h["empty"], h)
     pg.wait_for_timeout(4000)
     h = img_state(pg, ".hero-mirror img")
     check("sheet lambat: hero terisi setelah sheet datang", "1HHHH" in h["src"] and not h["empty"], h)
@@ -178,7 +179,8 @@ with sync_playwright() as p:
         n = pg.evaluate(PLACEHOLDER_JS)
         nb = pg.evaluate("document.querySelectorAll('.bubbles > blockquote.bubble').length")
         broken = pg.evaluate("[...document.images].filter(i=>!i.closest('[hidden]')).filter(i=>!i.complete||i.naturalWidth===0).length")
-        check(f"{name}: 12 kotak putih, 5 testimoni teks, tidak ada ikon gambar rusak", n == 12 and nb == 5 and broken == 0, (n, nb, broken))
+        hh = img_state(pg, ".hero-mirror img")
+        check(f"{name}: hero tetap foto bawaan, 11 kotak putih lain, 5 testimoni teks, tidak ada ikon gambar rusak", hh["src"] == HERO_LOCAL and hh["ok"] and n == 11 and nb == 5 and broken == 0, (hh, n, nb, broken))
         check(f"{name}: tidak ada error JS", not errors, errors)
         ctx.close()
 
@@ -188,7 +190,11 @@ with sync_playwright() as p:
     pg.on("request", lambda r: gv.append(r.url) if "docs.google.com" in r.url else None)
     pg.goto(URL, wait_until="networkidle")
     n = pg.evaluate(PLACEHOLDER_JS)
-    check("tanpa spreadsheetId: tidak memanggil Google, 12 kotak putih", not gv and n == 12 and not errors, (gv, n, errors))
+    check("tanpa spreadsheetId: tidak memanggil Google, hero foto bawaan, 11 kotak putih", not gv and n == 11 and img_state(pg, ".hero-mirror img")["ok"] and not errors, (gv, n, errors))
+    dr = []
+    pg.on("request", lambda r: dr.append(r.url) if "drive.google.com" in r.url else None)
+    pg.evaluate("renderPhotos([{bagian:'hero', foto:'https://drive.google.com/file/d/11LQtJc8kymh11kYLMJBGcgWSMx2-cnvh/view?usp=drivesdk'}])"); pg.wait_for_timeout(300)
+    check("foto hero di sheet = foto bawaan: tidak diunduh ulang dari Drive", not dr and img_state(pg, ".hero-mirror img")["src"] == HERO_LOCAL, dr)
     pg.locator(".hero").screenshot(path=f"{OUT}/kosong-hero.png")
     pg.locator("#portofolio").screenshot(path=f"{OUT}/kosong-portofolio.png")
     ctx.close()
