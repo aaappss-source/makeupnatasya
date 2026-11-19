@@ -693,6 +693,7 @@ a:hover { color: var(--berry-tua); }
   .hero { padding-top: 1.5rem; }
   .hero-inner { gap: 1.75rem; }
   .hero-mirror { grid-row: 1; width: min(62%, 250px); padding: 8px; }
+  .wordmark img { margin-inline: auto; }   /* HP: foto di atas, logo rata tengah */
   .hero-lead { margin-top: 1.1rem; }
   .hero-actions { margin-top: 1.5rem; }
 
