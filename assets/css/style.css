@@ -479,6 +479,7 @@ a:hover { color: var(--berry-tua); }
   font-size: var(--fs-sm);
   line-height: 1.45;
   text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);   /* tetap terbaca di atas foto saat di-zoom */
   pointer-events: none;
 }
 
