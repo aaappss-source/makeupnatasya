@@ -33,6 +33,19 @@ function slideFrom(img) {
   };
 }
 
+// Ukuran foto yang belum pernah termuat hanya perkiraan (4:5). Setelah foto besar
+// termuat, pakai ukuran aslinya supaya tidak gepeng.
+function fitToImage(pswp, content) {
+  const img = content.element;
+  if (!img || !img.naturalWidth) return;
+  const d = content.data;
+  const ratio = img.naturalWidth / img.naturalHeight;
+  if (Math.abs(ratio - d.width / d.height) / ratio <= 0.01) return;
+  d.width = content.width = img.naturalWidth;
+  d.height = content.height = img.naturalHeight;
+  if (content.slide && !pswp.isDestroying) pswp.refreshSlideContent(content.index);
+}
+
 function captionText(caption, n, total) {
   return caption ? `${caption} · ${n} / ${total}` : `${n} / ${total}`;
 }
@@ -80,23 +93,14 @@ async function openViewer(index) {
       imageClickAction: "zoom-or-close",
     });
 
-    // Ukuran foto yang belum pernah termuat hanya perkiraan (4:5). Setelah foto besar
-    // termuat, pakai ukuran aslinya supaya tidak gepeng.
-    pswp.on("loadComplete", ({ content }) => {
-      const img = content.element;
-      if (!img || !img.naturalWidth) return;
-      const d = content.data;
-      const ratio = img.naturalWidth / img.naturalHeight;
-      if (Math.abs(ratio - d.width / d.height) / ratio > 0.01) {
-        d.width = img.naturalWidth;
-        d.height = img.naturalHeight;
-        pswp.refreshSlideContent(content.index);
-      }
-    });
-
-    // Foto dari Google Drive dimuat tanpa referrer, sama seperti di galeri.
     pswp.on("contentLoadImage", ({ content }) => {
-      if (content.element) content.element.referrerPolicy = "no-referrer";
+      const img = content.element;
+      if (!img) return;
+      // Foto dari Google Drive dimuat tanpa referrer, sama seperti di galeri.
+      img.referrerPolicy = "no-referrer";
+      // Didengarkan langsung di <img> karena PhotoSwipe tidak memberi kabar untuk foto
+      // yang dimuat duluan (tetangga) sebelum slide-nya dibuat.
+      img.addEventListener("load", () => fitToImage(pswp, content), { once: true });
     });
 
     // Keterangan + nomor di bawah foto
@@ -119,7 +123,12 @@ async function openViewer(index) {
 
     // Tombol back HP menutup foto, bukan keluar dari website.
     let closedByBack = false;
-    const onBack = () => { closedByBack = true; pswp.close(); };
+    const onBack = () => {
+      closedByBack = true;
+      // Selama animasi buka, PhotoSwipe mengabaikan close(); tutup begitu animasinya selesai.
+      if (pswp.opener.isOpen) pswp.close();
+      else pswp.on("openingAnimationEnd", () => pswp.close());
+    };
     history.pushState({ natasyaFoto: true }, "");
     window.addEventListener("popstate", onBack);
     pswp.on("close", () => {

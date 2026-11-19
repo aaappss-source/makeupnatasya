@@ -198,6 +198,27 @@ with sync_playwright() as p:
     check("Task 2 laptop: tidak ada error JS", not errors, errors)
     ctx.close()
 
+    # Review: foto tersembunyi dicapai dengan geser satu-satu (dimuat duluan tanpa slide)
+    ctx, pg, errors, vendor = open_page(thumb=lambda u: LANDSCAPE if "1KKKK" in u else None)
+    k_hidden = pg.evaluate("(()=>{const i=[...document.querySelectorAll('.gallery .shot img[data-full]')].find(x=>x.dataset.caption==='Foto 11');return !!(i&&i.closest('.shot').hidden)})()")
+    shot(pg, 7).click(); wait_bar(pg, f"Foto 9 · 8 / {TOTAL}"); pg.wait_for_timeout(2000)
+    pg.keyboard.press("ArrowRight"); wait_bar(pg, f"Foto 10 · 9 / {TOTAL}"); pg.wait_for_timeout(1000)
+    pg.keyboard.press("ArrowRight"); wait_bar(pg, f"Foto 11 · 10 / {TOTAL}"); pg.wait_for_timeout(1200)
+    ratio = pg.evaluate("""(()=>{const s=[...document.querySelectorAll('.pswp__item')].find(i=>i.getAttribute('aria-hidden')==='false');
+      const im=s&&s.querySelector('img.pswp__img:not(.pswp__img--placeholder)'); if(!im||!im.naturalWidth) return null;
+      const r=im.getBoundingClientRect(); return [im.naturalWidth/im.naturalHeight, r.width/r.height]})()""")
+    check("foto tersembunyi dicapai lewat geser: proporsi benar", k_hidden and ratio and abs(ratio[0] - ratio[1]) / ratio[0] < 0.03, (k_hidden, ratio))
+    pg.keyboard.press("Escape"); wait_closed(pg); pg.wait_for_timeout(300)
+    # Review: back ditekan saat animasi buka belum selesai
+    url0 = pg.url
+    shot(pg, 0).click(); pg.wait_for_selector(".pswp", timeout=3000)
+    pg.evaluate("history.back()")
+    check("back saat animasi buka: viewer tertutup", wait_closed(pg, 3000))
+    pg.wait_for_timeout(300)
+    check("back saat animasi buka: tetap di website", pg.url == url0, pg.url)
+    check("review: tidak ada error JS", not errors, errors)
+    ctx.close()
+
     # HP: panah terlihat, ketuk 2x zoom
     ctx, pg, errors, vendor = open_page({"width": 375, "height": 760}, mobile=True)
     shot(pg, 0).tap()
